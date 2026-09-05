@@ -1,0 +1,63 @@
+{
+  "name": "ui-common",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "style": "./dist/ui-common.css",
+  "types": "./src/index.ts",
+  "scripts": {
+    "sync:exports": "node scripts/sync-package-exports.mjs",
+    "build": "node scripts/sync-package-exports.mjs && tsc -b && vite build",
+    "lint": "eslint .",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
+  },
+  "peerDependencies": {
+    "@ant-design/icons": ">=6",
+    "@tanstack/react-query": "^5.90.12",
+    "ag-grid-community": "^35.0.0",
+    "ag-grid-react": "^35.0.0",
+    "antd": "^6.1.0",
+    "react": ">=19",
+    "react-dom": ">=19"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./dist/index.js"
+    },
+    "./user-search-modal": {
+      "types": "./src/user-search-modal.ts",
+      "import": "./dist/user-search-modal.js"
+    },
+    "./config": {
+      "types": "./src/config.ts",
+      "import": "./dist/config.js"
+    },
+    "./style.css": "./dist/ui-common.css"
+  },
+  "devDependencies": {
+    "@ant-design/icons": "^6.1.0",
+    "@eslint/js": "^10.0.1",
+    "@tanstack/react-query": "^5.90.12",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.1.0",
+    "ag-grid-community": "^35.0.0",
+    "ag-grid-react": "^35.0.0",
+    "antd": "^6.1.0",
+    "eslint": "^10.9.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.4",
+    "globals": "^17.11.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "sass": "^1.95.0",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.67.0",
+    "vite": "^8.2.2"
+  }
+}

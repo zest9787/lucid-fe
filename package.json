@@ -1,0 +1,19 @@
+{
+  "name": "lucid-fe",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build:lib": "npm run build --workspace=packages/ui-common",
+    "lint": "npm run lint --workspaces",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "build": "npm run build --workspaces",
+    "dev:app": "npm run dev --workspace=packages/time-app",
+    "build:app": "npm run build --workspace=packages/time-app"
+  },
+  "devDependencies": {
+    "prettier": "^3.7.4"
+  }
+}

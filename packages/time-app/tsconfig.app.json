@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "es2023",
+    "lib": ["ES2023", "DOM"],
+    "module": "esnext",
+    "types": ["vite/client"],
+    "allowArbitraryExtensions": true,
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@entities/*": ["../ui-common/src/entities/*"],
+      "@features/*": ["../ui-common/src/features/*"],
+      "@shared/*": ["../ui-common/src/shared/*"],
+      "@widgets/*": ["../ui-common/src/widgets/*"],
+      "ui-common/config": ["../ui-common/src/config.ts"],
+      "ui-common/user-search-modal": ["../ui-common/src/user-search-modal.ts"],
+      "ui-common": ["../ui-common/src/index.ts"]
+    },
+
+    /* Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"]
+}

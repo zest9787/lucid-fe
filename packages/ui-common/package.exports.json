@@ -1,0 +1,15 @@
+{
+  ".": {
+    "types": "./src/index.ts",
+    "import": "./dist/index.js"
+  },
+  "./user-search-modal": {
+    "types": "./src/user-search-modal.ts",
+    "import": "./dist/user-search-modal.js"
+  },
+  "./config": {
+    "types": "./src/config.ts",
+    "import": "./dist/config.js"
+  },
+  "./style.css": "./dist/ui-common.css"
+}

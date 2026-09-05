@@ -1,0 +1,35 @@
+.employee-search-condition-form {
+  display: grid;
+  grid-template-columns: minmax(180px, 240px) minmax(220px, 1fr) auto;
+  gap: 12px;
+  width: 100%;
+
+  .ant-form-item {
+    margin-inline-end: 0;
+  }
+
+  &__company,
+  &__keyword {
+    min-width: 0;
+  }
+
+  &__actions {
+    .ant-form-item-control-input-content {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+  }
+
+  @media (max-width: 760px) {
+    grid-template-columns: 1fr;
+
+    &__actions .ant-form-item-control-input-content {
+      justify-content: stretch;
+
+      button {
+        flex: 1;
+      }
+    }
+  }
+}

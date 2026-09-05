@@ -1,0 +1,29 @@
+.home-page {
+  min-height: 100svh;
+  background: #f8fafc;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    padding-inline: 24px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+
+    h4 {
+      margin: 0;
+    }
+  }
+
+  &__content {
+    padding: 32px;
+  }
+
+  &__panel {
+    max-width: 720px;
+    padding: 32px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+  }
+}
