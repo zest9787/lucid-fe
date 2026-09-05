@@ -8,10 +8,15 @@
     grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
     gap: 16px;
     min-height: 420px;
+
+    &--multi {
+      grid-template-columns: minmax(220px, 260px) minmax(0, 1fr) minmax(320px, 0.8fr);
+    }
   }
 
   &__org-panel,
-  &__result-panel {
+  &__result-panel,
+  &__selected-panel {
     min-width: 0;
     padding: 16px;
     border: 1px solid #e5e7eb;
@@ -21,6 +26,17 @@
     h5 {
       margin: 0 0 12px;
     }
+  }
+
+  &__transfer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 40px;
+    gap: 12px;
+    align-items: center;
+  }
+
+  &__transfer-button {
+    justify-self: center;
   }
 
   &__grid {
@@ -46,6 +62,10 @@
 
   @media (max-width: 860px) {
     &__body {
+      grid-template-columns: 1fr;
+    }
+
+    &__transfer {
       grid-template-columns: 1fr;
     }
   }

@@ -1,11 +1,17 @@
 import { Button, Layout, Space, Typography } from 'antd'
 import { useState } from 'react'
-import { UserSearchModal, type UserSearchItem } from 'ui-common/user-search-modal'
+import {
+  MultiUserSearchModal,
+  UserSearchModal,
+  type UserSearchItem,
+} from 'ui-common/user-search-modal'
 import './HomePage.scss'
 
 export function HomePage() {
   const [isUserSearchOpen, setIsUserSearchOpen] = useState(false)
+  const [isMultiUserSearchOpen, setIsMultiUserSearchOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<UserSearchItem | null>(null)
+  const [selectedUsers, setSelectedUsers] = useState<UserSearchItem[]>([])
 
   return (
     <Layout className="home-page">
@@ -27,6 +33,20 @@ export function HomePage() {
                 ? `${selectedUser.name} (${selectedUser.email})`
                 : 'Selected user will appear here.'}
             </Typography.Text>
+            <Button type="primary" onClick={() => setIsMultiUserSearchOpen(true)}>
+              Search Users
+            </Button>
+            <Space className="home-page__selected-users" direction="vertical" size={4}>
+              {selectedUsers.length > 0 ? (
+                selectedUsers.map((user) => (
+                  <Typography.Text key={user.id}>
+                    {user.name} ({user.email})
+                  </Typography.Text>
+                ))
+              ) : (
+                <Typography.Text>Selected users will appear here.</Typography.Text>
+              )}
+            </Space>
           </Space>
         </section>
       </Layout.Content>
@@ -36,6 +56,14 @@ export function HomePage() {
         onSelect={(user) => {
           setSelectedUser(user)
           setIsUserSearchOpen(false)
+        }}
+      />
+      <MultiUserSearchModal
+        open={isMultiUserSearchOpen}
+        onCancel={() => setIsMultiUserSearchOpen(false)}
+        onSelect={(users) => {
+          setSelectedUsers(users)
+          setIsMultiUserSearchOpen(false)
         }}
       />
     </Layout>

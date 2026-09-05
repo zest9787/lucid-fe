@@ -1,4 +1,4 @@
-export { UserSearchModal } from '@widgets/user-search-modal'
+export { MultiUserSearchModal, UserSearchModal } from '@widgets/user-search-modal'
 export type {
   CompanyListResponse,
   CompanyOption,

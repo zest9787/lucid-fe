@@ -9,7 +9,10 @@ type EmployeeSearchResultGridProps = {
   employees: EmployeeSearchItem[]
   loading?: boolean
   selectedEmployeeId?: string
-  onSelect: (employee: EmployeeSearchItem) => void
+  selectedEmployeeIds?: string[]
+  selectionMode?: 'single' | 'multiple'
+  onSelect?: (employee: EmployeeSearchItem) => void
+  onSelectionChange?: (employees: EmployeeSearchItem[]) => void
 }
 
 const columns: ColDef<EmployeeSearchItem>[] = [
@@ -24,8 +27,15 @@ export function EmployeeSearchResultGrid({
   employees,
   loading = false,
   selectedEmployeeId,
+  selectedEmployeeIds = [],
+  selectionMode = 'single',
   onSelect,
+  onSelectionChange,
 }: EmployeeSearchResultGridProps) {
+  const selectedEmployeeIdSet = useMemo(
+    () => new Set(selectedEmployeeIds),
+    [selectedEmployeeIds],
+  )
   const defaultColDef = useMemo<ColDef<EmployeeSearchItem>>(
     () => ({
       resizable: true,
@@ -34,7 +44,6 @@ export function EmployeeSearchResultGrid({
     [],
   )
 
-  // Keep selection handling here so the modal can later swap in a multi-select grid.
   return (
     <div className="user-search-modal__grid ag-theme-quartz">
       <AgGridReact<EmployeeSearchItem>
@@ -44,17 +53,24 @@ export function EmployeeSearchResultGrid({
         loading={loading}
         rowData={employees}
         rowHeight={42}
-        rowSelection="single"
+        rowSelection={selectionMode}
+        rowMultiSelectWithClick={selectionMode === 'multiple'}
         rowClassRules={{
           'user-search-modal__row--selected': (params) =>
-            params.data?.id === selectedEmployeeId,
+            params.data
+              ? params.data.id === selectedEmployeeId ||
+                selectedEmployeeIdSet.has(params.data.id)
+              : false,
         }}
         suppressCellFocus
         theme="legacy"
         onRowClicked={(event) => {
-          if (event.data) {
+          if (event.data && onSelect) {
             onSelect(event.data)
           }
+        }}
+        onSelectionChanged={(event) => {
+          onSelectionChange?.(event.api.getSelectedRows())
         }}
       />
       {!loading && employees.length === 0 ? (
