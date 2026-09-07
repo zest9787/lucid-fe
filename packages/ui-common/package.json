@@ -6,10 +6,10 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "style": "./dist/ui-common.css",
-  "types": "./src/index.ts",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "sync:exports": "node scripts/sync-package-exports.mjs",
-    "build": "node scripts/sync-package-exports.mjs && tsc -b && vite build",
+    "build": "node scripts/sync-package-exports.mjs && tsc -b && vite build && tsc -p tsconfig.dts.json && node scripts/rewrite-dts-aliases.mjs",
     "lint": "eslint .",
     "format": "prettier . --write",
     "format:check": "prettier . --check"
@@ -25,15 +25,15 @@
   },
   "exports": {
     ".": {
-      "types": "./src/index.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
     "./user-search-modal": {
-      "types": "./src/user-search-modal.ts",
+      "types": "./dist/user-search-modal.d.ts",
       "import": "./dist/user-search-modal.js"
     },
     "./config": {
-      "types": "./src/config.ts",
+      "types": "./dist/config.d.ts",
       "import": "./dist/config.js"
     },
     "./style.css": "./dist/ui-common.css"
