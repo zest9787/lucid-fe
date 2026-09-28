@@ -1,10 +1,10 @@
 import { AppProviders } from './app/index'
-import { HomePage } from './pages'
+import { ConditionGridPage } from './pages'
 
 function App() {
   return (
     <AppProviders>
-      <HomePage />
+      <ConditionGridPage />
     </AppProviders>
   )
 }
