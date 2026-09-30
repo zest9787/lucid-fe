@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Form } from 'antd'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useShallow } from 'zustand/react/shallow'
 import { searchConditionDataSource } from '../../../shared/api/searchConditionDataSource'
 import type { SearchSelectOption } from '../../../shared/api/searchConditionDataSource'
 import type { ConditionGridSearchParams, ConditionGridSearchValues } from './types'
-
-const initialPagination = {
-  current: 1,
-  pageSize: 5,
-}
+import { useConditionGridSearchStore } from './conditionGridSearchStore'
 
 const initialValues: ConditionGridSearchValues = {
   position: '',
@@ -24,10 +21,23 @@ const jobTitleOptions: SearchSelectOption[] = [
 
 export function useConditionGridSearch() {
   const [form] = Form.useForm<ConditionGridSearchValues>()
-  const [submittedValues, setSubmittedValues] =
-    useState<ConditionGridSearchValues | null>(null)
-  const [pagination, setPagination] = useState(initialPagination)
-  const [searchSequence, setSearchSequence] = useState(0)
+  const {
+    changePage,
+    pagination,
+    resetSearch,
+    searchSequence,
+    submittedValues,
+    submitSearch,
+  } = useConditionGridSearchStore(
+    useShallow((state) => ({
+      changePage: state.changePage,
+      pagination: state.pagination,
+      resetSearch: state.resetSearch,
+      searchSequence: state.searchSequence,
+      submittedValues: state.submittedValues,
+      submitSearch: state.submitSearch,
+    })),
+  )
   const companyCode = Form.useWatch('companyCode', form)
 
   const { data: companies = [], isFetching: isCompaniesFetching } = useQuery({
@@ -82,21 +92,15 @@ export function useConditionGridSearch() {
       ...initialValues,
       companyCode: companies[0]?.value,
     })
-    setSubmittedValues(null)
-    setPagination(initialPagination)
+    resetSearch()
   }
 
   const handleSearch = (values: ConditionGridSearchValues) => {
-    setSubmittedValues(values)
-    setPagination((current) => ({ ...current, current: 1 }))
-    setSearchSequence((current) => current + 1)
+    submitSearch(values)
   }
 
   const handlePageChange = (page: number, pageSize: number) => {
-    setPagination((current) => ({
-      current: current.pageSize === pageSize ? page : 1,
-      pageSize,
-    }))
+    changePage(page, pageSize)
   }
 
   return {
@@ -106,7 +110,7 @@ export function useConditionGridSearch() {
     handlePageChange,
     handleRefresh,
     handleSearch,
-    initialValues,
+    initialValues: submittedValues ?? initialValues,
     isCompaniesFetching,
     isPositionsFetching,
     isRolesFetching,

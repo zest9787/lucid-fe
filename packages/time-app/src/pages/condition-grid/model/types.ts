@@ -22,3 +22,17 @@ export type ConditionGridSearchResult = {
   items: ConditionGridRow[]
   total: number
 }
+
+export type ConditionGridPagination = {
+  current: number
+  pageSize: number
+}
+
+export type ConditionGridSearchStore = {
+  submittedValues: ConditionGridSearchValues | null
+  pagination: ConditionGridPagination
+  searchSequence: number
+  submitSearch: (values: ConditionGridSearchValues) => void
+  changePage: (page: number, pageSize: number) => void
+  resetSearch: () => void
+}
