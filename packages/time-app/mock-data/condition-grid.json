@@ -1,0 +1,40 @@
+{
+  "companies": [
+    { "companyCode": "COM-001", "companyText": "Lucid Korea" },
+    { "companyCode": "COM-002", "companyText": "Lucid Global" }
+  ],
+  "positions": {
+    "COM-001": [
+      { "positionCode": "FE", "positionText": "Frontend Engineer" },
+      { "positionCode": "PO", "positionText": "Product Owner" }
+    ],
+    "COM-002": [
+      { "positionCode": "BE", "positionText": "Backend Engineer" },
+      { "positionCode": "AE", "positionText": "Account Executive" }
+    ]
+  },
+  "roles": {
+    "COM-001": [
+      { "roleCode": "ADMIN", "roleText": "Admin" },
+      { "roleCode": "MEMBER", "roleText": "Member" }
+    ],
+    "COM-002": [
+      { "roleCode": "MANAGER", "roleText": "Manager" },
+      { "roleCode": "VIEWER", "roleText": "Viewer" }
+    ]
+  },
+  "employees": [
+    { "id": "EMP-001", "companyCode": "COM-001", "position": "FE", "jobTitle": "A", "role": "ADMIN" },
+    { "id": "EMP-002", "companyCode": "COM-001", "position": "FE", "jobTitle": "B", "role": "MEMBER" },
+    { "id": "EMP-003", "companyCode": "COM-001", "position": "PO", "jobTitle": "A", "role": "ADMIN" },
+    { "id": "EMP-004", "companyCode": "COM-001", "position": "PO", "jobTitle": "B", "role": "MEMBER" },
+    { "id": "EMP-005", "companyCode": "COM-001", "position": "FE", "jobTitle": "A", "role": "MEMBER" },
+    { "id": "EMP-006", "companyCode": "COM-001", "position": "PO", "jobTitle": "B", "role": "ADMIN" },
+    { "id": "EMP-007", "companyCode": "COM-002", "position": "BE", "jobTitle": "A", "role": "MANAGER" },
+    { "id": "EMP-008", "companyCode": "COM-002", "position": "BE", "jobTitle": "B", "role": "VIEWER" },
+    { "id": "EMP-009", "companyCode": "COM-002", "position": "AE", "jobTitle": "A", "role": "MANAGER" },
+    { "id": "EMP-010", "companyCode": "COM-002", "position": "AE", "jobTitle": "B", "role": "VIEWER" },
+    { "id": "EMP-011", "companyCode": "COM-002", "position": "BE", "jobTitle": "A", "role": "VIEWER" },
+    { "id": "EMP-012", "companyCode": "COM-002", "position": "AE", "jobTitle": "B", "role": "MANAGER" }
+  ]
+}

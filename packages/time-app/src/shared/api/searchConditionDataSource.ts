@@ -1,5 +1,8 @@
 import { httpClient } from './httpClient'
-import { sampleCompanyList } from './sampleEmployeeSearchData'
+import type {
+  ConditionGridSearchParams,
+  ConditionGridSearchResult,
+} from '../../pages/condition-grid/model/types'
 
 export type SearchSelectOption = {
   value: string
@@ -28,26 +31,16 @@ const withAllOption = (options: SearchSelectOption[]): SearchSelectOption[] => [
   ...options.filter((option) => option.value !== allOption.value),
 ]
 
-const samplePositionsByCompany: Record<string, SearchSelectOption[]> = {
-  'COM-001': [
-    { value: 'FE', label: 'Frontend Engineer' },
-    { value: 'PO', label: 'Product Owner' },
-  ],
-  'COM-002': [
-    { value: 'BE', label: 'Backend Engineer' },
-    { value: 'AE', label: 'Account Executive' },
-  ],
-}
+const isConditionGridSearchResult = (
+  value: unknown,
+): value is ConditionGridSearchResult => {
+  if (!value || typeof value !== 'object') {
+    return false
+  }
 
-const sampleRolesByCompany: Record<string, SearchSelectOption[]> = {
-  'COM-001': [
-    { value: 'ADMIN', label: 'Admin' },
-    { value: 'MEMBER', label: 'Member' },
-  ],
-  'COM-002': [
-    { value: 'MANAGER', label: 'Manager' },
-    { value: 'VIEWER', label: 'Viewer' },
-  ],
+  const result = value as Partial<ConditionGridSearchResult>
+
+  return Array.isArray(result.items) && typeof result.total === 'number'
 }
 
 const toCompanyOptions = (companies: CompanyOptionResponse[]): SearchSelectOption[] =>
@@ -70,36 +63,35 @@ const toRoleOptions = (roles: RoleOptionResponse[]): SearchSelectOption[] =>
 
 export const searchConditionDataSource = {
   getCompanies: async () => {
-    try {
-      const { data } = await httpClient.get<{ companies: CompanyOptionResponse[] }>(
-        '/companies',
-      )
+    const { data } = await httpClient.get<{ companies: CompanyOptionResponse[] }>(
+      '/companies',
+    )
 
-      return toCompanyOptions(data.companies)
-    } catch {
-      return toCompanyOptions(sampleCompanyList.companies)
-    }
+    return toCompanyOptions(data.companies)
   },
   getPositions: async (companyCode: string) => {
-    try {
-      const { data } = await httpClient.get<PositionOptionResponse[]>('/positions', {
-        params: { companyCode },
-      })
+    const { data } = await httpClient.get<PositionOptionResponse[]>('/positions', {
+      params: { companyCode },
+    })
 
-      return withAllOption(toPositionOptions(data))
-    } catch {
-      return withAllOption(samplePositionsByCompany[companyCode] ?? [])
-    }
+    return withAllOption(toPositionOptions(data))
   },
   getRoles: async (companyCode: string) => {
-    try {
-      const { data } = await httpClient.get<RoleOptionResponse[]>('/roles', {
-        params: { companyCode },
-      })
+    const { data } = await httpClient.get<RoleOptionResponse[]>('/roles', {
+      params: { companyCode },
+    })
 
-      return withAllOption(toRoleOptions(data))
-    } catch {
-      return withAllOption(sampleRolesByCompany[companyCode] ?? [])
+    return withAllOption(toRoleOptions(data))
+  },
+  search: async (params: ConditionGridSearchParams) => {
+    const { data } = await httpClient.get<unknown>('/employees', {
+      params,
+    })
+
+    if (!isConditionGridSearchResult(data)) {
+      throw new Error('검색 API 응답 형식이 올바르지 않습니다.')
     }
+
+    return data
   },
 }

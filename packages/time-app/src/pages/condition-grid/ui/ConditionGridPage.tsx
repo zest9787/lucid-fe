@@ -1,6 +1,6 @@
 import type { ColDef } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
-import { Layout, Typography } from 'antd'
+import { Layout, Pagination, Typography } from 'antd'
 import { useMemo } from 'react'
 import '@shared/lib/ag-grid/registerCommunityModules'
 import { SearchForm, SearchSelect } from '@shared/ui/search-form'
@@ -13,6 +13,7 @@ import './ConditionGridPage.scss'
 const columns: ColDef<ConditionGridRow>[] = [
   { field: 'companyCode', headerName: 'Company Code', minWidth: 160, flex: 1 },
   { field: 'position', headerName: 'Position', minWidth: 180, flex: 1 },
+  { field: 'jobTitle', headerName: 'Job Title', minWidth: 140, flex: 1 },
   { field: 'role', headerName: 'Role', minWidth: 160, flex: 1 },
 ]
 
@@ -21,15 +22,19 @@ export function ConditionGridPage() {
     companies,
     form,
     handleCompanyChange,
+    handlePageChange,
     handleRefresh,
     handleSearch,
     initialValues,
     isCompaniesFetching,
     isPositionsFetching,
     isRolesFetching,
+    isSearchFetching,
     jobTitleOptions,
     positions,
+    rowData,
     roles,
+    pagination,
   } = useConditionGridSearch()
 
   const defaultColDef = useMemo<ColDef<ConditionGridRow>>(
@@ -53,6 +58,7 @@ export function ConditionGridPage() {
             initialValues={initialValues}
             onFinish={handleSearch}
             onRefresh={handleRefresh}
+            searchLoading={isSearchFetching}
           >
             <SearchSelect
               label="회사코드"
@@ -90,12 +96,24 @@ export function ConditionGridPage() {
             columnDefs={columns}
             defaultColDef={defaultColDef}
             getRowId={(params) => params.data.id}
-            rowData={[]}
+            loading={isSearchFetching}
+            rowData={rowData}
             rowHeight={42}
             suppressCellFocus
             theme="legacy"
           />
         </section>
+        <div className="condition-grid-page__pagination">
+          <Pagination
+            current={pagination.current}
+            onChange={handlePageChange}
+            pageSize={pagination.pageSize}
+            pageSizeOptions={[5, 10, 20]}
+            showSizeChanger
+            showTotal={(total) => `총 ${total}건`}
+            total={pagination.total}
+          />
+        </div>
       </Layout.Content>
     </Layout>
   )

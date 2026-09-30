@@ -38,10 +38,14 @@
     border-radius: 8px;
   }
 
+  &__pagination {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   @media (max-width: 760px) {
     &__content {
       padding: 16px;
     }
-
   }
 }
