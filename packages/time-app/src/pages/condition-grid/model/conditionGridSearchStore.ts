@@ -1,15 +1,12 @@
 import { create } from 'zustand'
+import { INITIAL_PAGINATION } from '@shared/lib/pagination'
 import type { ConditionGridSearchStore } from './types'
-
-const initialPagination = {
-  current: 1,
-  pageSize: 5,
-}
 
 export const useConditionGridSearchStore = create<ConditionGridSearchStore>((set) => ({
   submittedValues: null,
-  pagination: initialPagination,
+  pagination: { ...INITIAL_PAGINATION },
   searchSequence: 0,
+  selectedRowId: null,
 
   submitSearch: (values) =>
     set((state) => ({
@@ -32,7 +29,12 @@ export const useConditionGridSearchStore = create<ConditionGridSearchStore>((set
   resetSearch: () =>
     set({
       submittedValues: null,
-      pagination: initialPagination,
+      pagination: { ...INITIAL_PAGINATION },
       searchSequence: 0,
+      selectedRowId: null,
     }),
+
+  openDetail: (rowId) => set({ selectedRowId: rowId }),
+
+  closeDetail: () => set({ selectedRowId: null }),
 }))

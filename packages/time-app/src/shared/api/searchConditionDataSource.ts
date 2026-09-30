@@ -1,5 +1,6 @@
 import { httpClient } from './httpClient'
 import type {
+  ConditionGridDetail,
   ConditionGridSearchParams,
   ConditionGridSearchResult,
 } from '../../pages/condition-grid/model/types'
@@ -41,6 +42,16 @@ const isConditionGridSearchResult = (
   const result = value as Partial<ConditionGridSearchResult>
 
   return Array.isArray(result.items) && typeof result.total === 'number'
+}
+
+const isConditionGridDetail = (value: unknown): value is ConditionGridDetail => {
+  if (!value || typeof value !== 'object') {
+    return false
+  }
+
+  const detail = value as Partial<ConditionGridDetail>
+
+  return typeof detail.id === 'string' && typeof detail.name === 'string'
 }
 
 const toCompanyOptions = (companies: CompanyOptionResponse[]): SearchSelectOption[] =>
@@ -90,6 +101,17 @@ export const searchConditionDataSource = {
 
     if (!isConditionGridSearchResult(data)) {
       throw new Error('검색 API 응답 형식이 올바르지 않습니다.')
+    }
+
+    return data
+  },
+  getDetail: async (rowId: string) => {
+    const { data } = await httpClient.get<unknown>(
+      `/employees/${encodeURIComponent(rowId)}`,
+    )
+
+    if (!isConditionGridDetail(data)) {
+      throw new Error('상세 API 응답 형식이 올바르지 않습니다.')
     }
 
     return data

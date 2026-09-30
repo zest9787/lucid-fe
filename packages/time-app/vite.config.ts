@@ -14,6 +14,12 @@ type MockEmployee = {
   position: string
   jobTitle: string
   role: string
+  employeeNo: string
+  name: string
+  email: string
+  department: string
+  phone: string
+  hireDate: string
 }
 
 type ConditionGridMockData = {
@@ -45,6 +51,20 @@ const conditionGridMockApi = (): Plugin => ({
       const companyCode = url.searchParams.get('companyCode') ?? ''
       let body: unknown
 
+      const detailMatch = url.pathname.match(/^\/api\/employees\/([^/]+)$/)
+
+      if (detailMatch) {
+        const employeeId = decodeURIComponent(detailMatch[1])
+        const employee = data.employees.find((item) => item.id === employeeId)
+
+        response.statusCode = employee ? 200 : 404
+        response.setHeader('Content-Type', 'application/json; charset=utf-8')
+        response.end(
+          JSON.stringify(employee ?? { message: 'Employee detail not found.' }),
+        )
+        return
+      }
+
       switch (url.pathname) {
         case '/api/companies':
           body = { companies: data.companies }
@@ -69,9 +89,18 @@ const conditionGridMockApi = (): Plugin => ({
               (!role || employee.role === role),
           )
           const start = (page - 1) * pageSize
+          const rows = filteredEmployees.map(
+            ({ id, companyCode, position, jobTitle, role }) => ({
+              id,
+              companyCode,
+              position,
+              jobTitle,
+              role,
+            }),
+          )
 
           body = {
-            items: filteredEmployees.slice(start, start + pageSize),
+            items: rows.slice(start, start + pageSize),
             total: filteredEmployees.length,
           }
           break

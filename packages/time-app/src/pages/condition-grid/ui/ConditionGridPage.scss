@@ -36,6 +36,10 @@
     background: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
+
+    .ag-row {
+      cursor: pointer;
+    }
   }
 
   &__pagination {
@@ -48,4 +52,9 @@
       padding: 16px;
     }
   }
+}
+
+.condition-grid-detail-modal__content {
+  min-height: 180px;
+  padding-block: 8px;
 }

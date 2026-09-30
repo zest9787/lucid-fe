@@ -6,6 +6,7 @@ import '@shared/lib/ag-grid/registerCommunityModules'
 import { SearchForm, SearchSelect } from '@shared/ui/search-form'
 import { useConditionGridSearch } from '../model/useConditionGridSearch'
 import type { ConditionGridRow, ConditionGridSearchValues } from '../model/types'
+import { ConditionGridDetailModal } from './ConditionGridDetailModal'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 import './ConditionGridPage.scss'
@@ -19,14 +20,19 @@ const columns: ColDef<ConditionGridRow>[] = [
 
 export function ConditionGridPage() {
   const {
+    closeDetail,
     companies,
     form,
     handleCompanyChange,
     handlePageChange,
     handleRefresh,
+    handleRowClick,
     handleSearch,
     initialValues,
     isCompaniesFetching,
+    isDetailError,
+    isDetailFetching,
+    isDetailOpen,
     isPositionsFetching,
     isRolesFetching,
     isSearchFetching,
@@ -35,6 +41,7 @@ export function ConditionGridPage() {
     rowData,
     roles,
     pagination,
+    detail,
   } = useConditionGridSearch()
 
   const defaultColDef = useMemo<ColDef<ConditionGridRow>>(
@@ -97,6 +104,11 @@ export function ConditionGridPage() {
             defaultColDef={defaultColDef}
             getRowId={(params) => params.data.id}
             loading={isSearchFetching}
+            onRowClicked={(event) => {
+              if (event.data) {
+                handleRowClick(event.data.id)
+              }
+            }}
             rowData={rowData}
             rowHeight={42}
             suppressCellFocus
@@ -115,6 +127,13 @@ export function ConditionGridPage() {
           />
         </div>
       </Layout.Content>
+      <ConditionGridDetailModal
+        detail={detail}
+        error={isDetailError}
+        loading={isDetailFetching}
+        onClose={closeDetail}
+        open={isDetailOpen}
+      />
     </Layout>
   )
 }

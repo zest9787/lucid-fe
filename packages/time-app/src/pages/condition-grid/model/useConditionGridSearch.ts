@@ -23,17 +23,23 @@ export function useConditionGridSearch() {
   const [form] = Form.useForm<ConditionGridSearchValues>()
   const {
     changePage,
+    closeDetail,
+    openDetail,
     pagination,
     resetSearch,
     searchSequence,
+    selectedRowId,
     submittedValues,
     submitSearch,
   } = useConditionGridSearchStore(
     useShallow((state) => ({
       changePage: state.changePage,
+      closeDetail: state.closeDetail,
+      openDetail: state.openDetail,
       pagination: state.pagination,
       resetSearch: state.resetSearch,
       searchSequence: state.searchSequence,
+      selectedRowId: state.selectedRowId,
       submittedValues: state.submittedValues,
       submitSearch: state.submitSearch,
     })),
@@ -75,6 +81,16 @@ export function useConditionGridSearch() {
     queryFn: () => searchConditionDataSource.search(searchParams!),
   })
 
+  const {
+    data: detail,
+    isError: isDetailError,
+    isFetching: isDetailFetching,
+  } = useQuery({
+    enabled: Boolean(selectedRowId),
+    queryKey: ['condition-grid', 'detail', selectedRowId],
+    queryFn: () => searchConditionDataSource.getDetail(selectedRowId!),
+  })
+
   useEffect(() => {
     const firstCompanyCode = companies[0]?.value
 
@@ -103,15 +119,23 @@ export function useConditionGridSearch() {
     changePage(page, pageSize)
   }
 
+  const handleRowClick = (rowId: string) => {
+    openDetail(rowId)
+  }
+
   return {
     companies,
     form,
     handleCompanyChange,
     handlePageChange,
     handleRefresh,
+    handleRowClick,
     handleSearch,
     initialValues: submittedValues ?? initialValues,
     isCompaniesFetching,
+    isDetailError,
+    isDetailFetching,
+    isDetailOpen: Boolean(selectedRowId),
     isPositionsFetching,
     isRolesFetching,
     isSearchFetching,
@@ -123,5 +147,7 @@ export function useConditionGridSearch() {
       ...pagination,
       total: searchResult.total,
     },
+    closeDetail,
+    detail,
   }
 }

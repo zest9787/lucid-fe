@@ -24,17 +24,17 @@
     ]
   },
   "employees": [
-    { "id": "EMP-001", "companyCode": "COM-001", "position": "FE", "jobTitle": "A", "role": "ADMIN" },
-    { "id": "EMP-002", "companyCode": "COM-001", "position": "FE", "jobTitle": "B", "role": "MEMBER" },
-    { "id": "EMP-003", "companyCode": "COM-001", "position": "PO", "jobTitle": "A", "role": "ADMIN" },
-    { "id": "EMP-004", "companyCode": "COM-001", "position": "PO", "jobTitle": "B", "role": "MEMBER" },
-    { "id": "EMP-005", "companyCode": "COM-001", "position": "FE", "jobTitle": "A", "role": "MEMBER" },
-    { "id": "EMP-006", "companyCode": "COM-001", "position": "PO", "jobTitle": "B", "role": "ADMIN" },
-    { "id": "EMP-007", "companyCode": "COM-002", "position": "BE", "jobTitle": "A", "role": "MANAGER" },
-    { "id": "EMP-008", "companyCode": "COM-002", "position": "BE", "jobTitle": "B", "role": "VIEWER" },
-    { "id": "EMP-009", "companyCode": "COM-002", "position": "AE", "jobTitle": "A", "role": "MANAGER" },
-    { "id": "EMP-010", "companyCode": "COM-002", "position": "AE", "jobTitle": "B", "role": "VIEWER" },
-    { "id": "EMP-011", "companyCode": "COM-002", "position": "BE", "jobTitle": "A", "role": "VIEWER" },
-    { "id": "EMP-012", "companyCode": "COM-002", "position": "AE", "jobTitle": "B", "role": "MANAGER" }
+    { "id": "EMP-001", "companyCode": "COM-001", "position": "FE", "jobTitle": "A", "role": "ADMIN", "employeeNo": "2024001", "name": "Kim Minjun", "email": "minjun.kim@example.com", "department": "Frontend Team", "phone": "010-1000-0001", "hireDate": "2024-01-08" },
+    { "id": "EMP-002", "companyCode": "COM-001", "position": "FE", "jobTitle": "B", "role": "MEMBER", "employeeNo": "2024002", "name": "Lee Seoyeon", "email": "seoyeon.lee@example.com", "department": "Frontend Team", "phone": "010-1000-0002", "hireDate": "2024-02-12" },
+    { "id": "EMP-003", "companyCode": "COM-001", "position": "PO", "jobTitle": "A", "role": "ADMIN", "employeeNo": "2024003", "name": "Park Jiho", "email": "jiho.park@example.com", "department": "Product Team", "phone": "010-1000-0003", "hireDate": "2023-09-18" },
+    { "id": "EMP-004", "companyCode": "COM-001", "position": "PO", "jobTitle": "B", "role": "MEMBER", "employeeNo": "2024004", "name": "Choi Yuna", "email": "yuna.choi@example.com", "department": "Product Team", "phone": "010-1000-0004", "hireDate": "2023-11-06" },
+    { "id": "EMP-005", "companyCode": "COM-001", "position": "FE", "jobTitle": "A", "role": "MEMBER", "employeeNo": "2024005", "name": "Jung Haneul", "email": "haneul.jung@example.com", "department": "Platform Team", "phone": "010-1000-0005", "hireDate": "2022-07-04" },
+    { "id": "EMP-006", "companyCode": "COM-001", "position": "PO", "jobTitle": "B", "role": "ADMIN", "employeeNo": "2024006", "name": "Han Jisoo", "email": "jisoo.han@example.com", "department": "Product Team", "phone": "010-1000-0006", "hireDate": "2022-10-17" },
+    { "id": "EMP-007", "companyCode": "COM-002", "position": "BE", "jobTitle": "A", "role": "MANAGER", "employeeNo": "2024007", "name": "Alex Morgan", "email": "alex.morgan@example.com", "department": "Platform Team", "phone": "010-2000-0007", "hireDate": "2021-05-10" },
+    { "id": "EMP-008", "companyCode": "COM-002", "position": "BE", "jobTitle": "B", "role": "VIEWER", "employeeNo": "2024008", "name": "Taylor Reed", "email": "taylor.reed@example.com", "department": "Backend Team", "phone": "010-2000-0008", "hireDate": "2022-03-21" },
+    { "id": "EMP-009", "companyCode": "COM-002", "position": "AE", "jobTitle": "A", "role": "MANAGER", "employeeNo": "2024009", "name": "Jordan Lee", "email": "jordan.lee@example.com", "department": "Sales Team", "phone": "010-2000-0009", "hireDate": "2020-08-03" },
+    { "id": "EMP-010", "companyCode": "COM-002", "position": "AE", "jobTitle": "B", "role": "VIEWER", "employeeNo": "2024010", "name": "Casey Kim", "email": "casey.kim@example.com", "department": "Sales Team", "phone": "010-2000-0010", "hireDate": "2023-01-16" },
+    { "id": "EMP-011", "companyCode": "COM-002", "position": "BE", "jobTitle": "A", "role": "VIEWER", "employeeNo": "2024011", "name": "Robin Park", "email": "robin.park@example.com", "department": "Backend Team", "phone": "010-2000-0011", "hireDate": "2021-12-13" },
+    { "id": "EMP-012", "companyCode": "COM-002", "position": "AE", "jobTitle": "B", "role": "MANAGER", "employeeNo": "2024012", "name": "Jamie Choi", "email": "jamie.choi@example.com", "department": "Customer Success", "phone": "010-2000-0012", "hireDate": "2024-04-01" }
   ]
 }
