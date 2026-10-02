@@ -1,4 +1,4 @@
-import { ReloadOutlined, SearchOutlined } from '@ant-design/icons'
+import { ClearOutlined, SearchOutlined } from '@ant-design/icons'
 import { Button, Form, Space } from 'antd'
 import type { FormInstance, FormProps } from 'antd'
 import type { PropsWithChildren } from 'react'
@@ -8,8 +8,7 @@ type SearchFormProps<Values extends object> = PropsWithChildren<{
   form: FormInstance<Values>
   initialValues?: FormProps<Values>['initialValues']
   onFinish: (values: Values) => void
-  onRefresh: () => void
-  refreshLoading?: boolean
+  onReset: () => void
   searchLoading?: boolean
 }>
 
@@ -18,8 +17,7 @@ export function SearchForm<Values extends object>({
   form,
   initialValues,
   onFinish,
-  onRefresh,
-  refreshLoading = false,
+  onReset,
   searchLoading = false,
 }: SearchFormProps<Values>) {
   return (
@@ -34,11 +32,11 @@ export function SearchForm<Values extends object>({
       <Form.Item className="common-search-form__actions">
         <Space size={8}>
           <Button
-            icon={<ReloadOutlined />}
-            loading={refreshLoading}
-            onClick={onRefresh}
+            htmlType="button"
+            icon={<ClearOutlined />}
+            onClick={onReset}
           >
-            새로고침
+            초기화
           </Button>
           <Button
             htmlType="submit"

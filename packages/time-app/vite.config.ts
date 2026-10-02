@@ -18,6 +18,7 @@ type MockEmployee = {
   name: string
   email: string
   department: string
+  team: string
   phone: string
   hireDate: string
 }
@@ -35,6 +36,8 @@ const mockDataPath = fileURLToPath(
 
 const readMockData = () =>
   JSON.parse(readFileSync(mockDataPath, 'utf8')) as ConditionGridMockData
+
+const mileageYears = [2024, 2025, 2026] as const
 
 const conditionGridMockApi = (): Plugin => ({
   name: 'condition-grid-mock-api',
@@ -79,6 +82,7 @@ const conditionGridMockApi = (): Plugin => ({
           const position = url.searchParams.get('position') ?? ''
           const jobTitle = url.searchParams.get('jobTitle') ?? ''
           const role = url.searchParams.get('role') ?? ''
+          const type = url.searchParams.get('type') ?? 'S'
           const page = Math.max(Number(url.searchParams.get('page')) || 1, 1)
           const pageSize = Math.max(Number(url.searchParams.get('pageSize')) || 5, 1)
           const filteredEmployees = data.employees.filter(
@@ -89,6 +93,32 @@ const conditionGridMockApi = (): Plugin => ({
               (!role || employee.role === role),
           )
           const start = (page - 1) * pageSize
+          if (type === 'D') {
+            const employees = [...filteredEmployees].sort(
+              (employeeA, employeeB) =>
+                employeeA.department.localeCompare(employeeB.department) ||
+                employeeA.team.localeCompare(employeeB.team) ||
+                employeeA.name.localeCompare(employeeB.name),
+            )
+            const pageEmployees = employees.slice(start, start + pageSize)
+
+            body = {
+              items: pageEmployees.flatMap((employee) =>
+                mileageYears.map((year, yearIndex) => ({
+                  ...employee,
+                  id: `${employee.id}-${year}`,
+                  employeeId: employee.id,
+                  user: employee.name,
+                  year,
+                  mileage:
+                    1000 + Number(employee.employeeNo.slice(-2)) * 125 + yearIndex * 200,
+                })),
+              ),
+              total: filteredEmployees.length,
+            }
+            break
+          }
+
           const rows = filteredEmployees.map(
             ({ id, companyCode, position, jobTitle, role }) => ({
               id,
