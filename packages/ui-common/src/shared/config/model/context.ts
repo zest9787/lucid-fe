@@ -1,4 +1,6 @@
 import { createContext } from 'react'
-import type { UiCommonConfig } from './types'
+import type { SharedServices } from './types'
 
-export const UiCommonConfigContext = createContext<UiCommonConfig | null>(null)
+export const SharedServicesContext = createContext<SharedServices | null>(null)
+
+SharedServicesContext.displayName = 'SharedServicesContext'

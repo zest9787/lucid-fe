@@ -1,6 +1,6 @@
 export {
-  UiCommonProvider,
-  useUiCommonConfig,
+  SharedServicesProvider,
+  useSharedServices,
   type EmployeeSearchDataSource,
-  type UiCommonConfig,
+  type SharedServices,
 } from '@shared/config'

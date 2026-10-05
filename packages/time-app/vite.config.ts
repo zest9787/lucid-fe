@@ -30,6 +30,19 @@ type ConditionGridMockData = {
   employees: MockEmployee[]
 }
 
+type MockMileageRecord = {
+  id: string
+  companyCode: string
+  employeeNo: string
+  name: string
+  department: string
+  team: string
+  year: number
+  mileage: number
+  status: 'Pending' | 'Approved' | 'Rejected'
+  effectiveDate: string
+}
+
 const mockDataPath = fileURLToPath(
   new URL('./mock-data/condition-grid.json', import.meta.url),
 )
@@ -38,6 +51,49 @@ const readMockData = () =>
   JSON.parse(readFileSync(mockDataPath, 'utf8')) as ConditionGridMockData
 
 const mileageYears = [2024, 2025, 2026] as const
+const detailEmployeeCountPerCompany = 1000
+let savedMileageRecords: MockMileageRecord[] | null = null
+
+const createDetailEmployees = (employees: MockEmployee[]) => {
+  const employeesByCompany = employees.reduce<Record<string, MockEmployee[]>>(
+    (groups, employee) => {
+      groups[employee.companyCode] = [...(groups[employee.companyCode] ?? []), employee]
+      return groups
+    },
+    {},
+  )
+
+  return Object.values(employeesByCompany).flatMap((companyEmployees) =>
+    Array.from({ length: detailEmployeeCountPerCompany }, (_, index) => {
+      const employee = companyEmployees[index % companyEmployees.length]
+      const sequence = String(index + 1).padStart(4, '0')
+
+      return {
+        ...employee,
+        id: `${employee.id}-${sequence}`,
+        employeeNo: String(2024000 + index + 1),
+        name: `${employee.name} ${sequence}`,
+        email: `${employee.email.split('@')[0]}.${sequence}@example.com`,
+      }
+    }),
+  )
+}
+
+const createMileageRecords = (employees: MockEmployee[]): MockMileageRecord[] =>
+  employees.flatMap((employee) =>
+    mileageYears.map((year, yearIndex) => ({
+      id: `${employee.id}-${year}`,
+      companyCode: employee.companyCode,
+      department: employee.department,
+      effectiveDate: `${year}-01-01`,
+      employeeNo: employee.employeeNo,
+      mileage: 1000 + Number(employee.employeeNo.slice(-2)) * 125 + yearIndex * 200,
+      name: employee.name,
+      status: year === 2026 ? 'Pending' : 'Approved',
+      team: employee.team,
+      year,
+    })),
+  )
 
 const conditionGridMockApi = (): Plugin => ({
   name: 'condition-grid-mock-api',
@@ -51,14 +107,49 @@ const conditionGridMockApi = (): Plugin => ({
       }
 
       const data = readMockData()
+      const detailEmployees = createDetailEmployees(data.employees)
+      savedMileageRecords ??= createMileageRecords(detailEmployees)
       const companyCode = url.searchParams.get('companyCode') ?? ''
       let body: unknown
+
+      if (url.pathname === '/api/mileage-records/batch' && request.method === 'POST') {
+        let requestBody = ''
+
+        request.on('data', (chunk) => {
+          requestBody += String(chunk)
+        })
+        request.on('end', () => {
+          const payload = JSON.parse(requestBody) as {
+            deletedIds: string[]
+            rows: MockMileageRecord[]
+          }
+          const deletedIdSet = new Set(payload.deletedIds)
+          const recordMap = new Map(
+            (savedMileageRecords ?? [])
+              .filter((record) => !deletedIdSet.has(record.id))
+              .map((record) => [record.id, record]),
+          )
+
+          payload.rows.forEach((record) => recordMap.set(record.id, record))
+          savedMileageRecords = [...recordMap.values()]
+          response.statusCode = 200
+          response.setHeader('Content-Type', 'application/json; charset=utf-8')
+          response.end(
+            JSON.stringify({
+              savedCount: payload.rows.length + payload.deletedIds.length,
+            }),
+          )
+        })
+        return
+      }
 
       const detailMatch = url.pathname.match(/^\/api\/employees\/([^/]+)$/)
 
       if (detailMatch) {
         const employeeId = decodeURIComponent(detailMatch[1])
-        const employee = data.employees.find((item) => item.id === employeeId)
+        const employee = [...data.employees, ...detailEmployees].find(
+          (item) => item.id === employeeId,
+        )
 
         response.statusCode = employee ? 200 : 404
         response.setHeader('Content-Type', 'application/json; charset=utf-8')
@@ -78,21 +169,32 @@ const conditionGridMockApi = (): Plugin => ({
         case '/api/roles':
           body = data.roles[companyCode] ?? []
           break
+        case '/api/mileage-records': {
+          const employeeNo = url.searchParams.get('employeeNo') ?? ''
+          const items = (savedMileageRecords ?? []).filter(
+            (record) =>
+              (!companyCode || record.companyCode === companyCode) &&
+              (!employeeNo || record.employeeNo.includes(employeeNo)),
+          )
+
+          body = { items }
+          break
+        }
         case '/api/employees': {
           const position = url.searchParams.get('position') ?? ''
+          const employeeNo = url.searchParams.get('employeeNo') ?? ''
           const jobTitle = url.searchParams.get('jobTitle') ?? ''
           const role = url.searchParams.get('role') ?? ''
           const type = url.searchParams.get('type') ?? 'S'
-          const page = Math.max(Number(url.searchParams.get('page')) || 1, 1)
-          const pageSize = Math.max(Number(url.searchParams.get('pageSize')) || 5, 1)
-          const filteredEmployees = data.employees.filter(
+          const sourceEmployees = type === 'D' ? detailEmployees : data.employees
+          const filteredEmployees = sourceEmployees.filter(
             (employee) =>
               employee.companyCode === companyCode &&
+              (!employeeNo || employee.employeeNo.includes(employeeNo)) &&
               (!position || employee.position === position) &&
               (!jobTitle || employee.jobTitle === jobTitle) &&
               (!role || employee.role === role),
           )
-          const start = (page - 1) * pageSize
           if (type === 'D') {
             const employees = [...filteredEmployees].sort(
               (employeeA, employeeB) =>
@@ -100,10 +202,8 @@ const conditionGridMockApi = (): Plugin => ({
                 employeeA.team.localeCompare(employeeB.team) ||
                 employeeA.name.localeCompare(employeeB.name),
             )
-            const pageEmployees = employees.slice(start, start + pageSize)
-
             body = {
-              items: pageEmployees.flatMap((employee) =>
+              items: employees.flatMap((employee) =>
                 mileageYears.map((year, yearIndex) => ({
                   ...employee,
                   id: `${employee.id}-${year}`,
@@ -130,7 +230,7 @@ const conditionGridMockApi = (): Plugin => ({
           )
 
           body = {
-            items: rows.slice(start, start + pageSize),
+            items: rows,
             total: filteredEmployees.length,
           }
           break

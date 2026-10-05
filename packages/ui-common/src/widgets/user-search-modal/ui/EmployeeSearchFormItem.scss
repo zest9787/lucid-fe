@@ -1,0 +1,26 @@
+.employee-search-form-item {
+  min-width: 500px;
+
+  &__number {
+    width: 180px;
+  }
+
+  &__name {
+    width: 150px;
+  }
+
+  @media (max-width: 760px) {
+    min-width: 0;
+
+    .ant-space-compact {
+      display: flex;
+      width: 100%;
+    }
+
+    &__number,
+    &__name {
+      flex: 1;
+      width: auto;
+    }
+  }
+}

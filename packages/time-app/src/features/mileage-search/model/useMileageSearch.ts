@@ -11,6 +11,8 @@ import type {
 } from './types'
 
 const initialValues: MileageSearchValues = {
+  employeeName: '',
+  employeeNo: '',
   position: '',
   jobTitle: '',
   role: '',
@@ -32,20 +34,16 @@ export function useMileageSearch() {
   const [form] = Form.useForm<MileageSearchValues>()
   const queryClient = useQueryClient()
   const {
-    changePage,
     closeDetail,
     openDetail,
-    pagination,
     resetSearch,
     selectedRowId,
     submittedValues,
     submitSearch,
   } = useMileageSearchStore(
     useShallow((state) => ({
-      changePage: state.changePage,
       closeDetail: state.closeDetail,
       openDetail: state.openDetail,
-      pagination: state.pagination,
       resetSearch: state.resetSearch,
       selectedRowId: state.selectedRowId,
       submittedValues: state.submittedValues,
@@ -70,9 +68,12 @@ export function useMileageSearch() {
 
   const searchParams: MileageSearchParams | null = submittedValues
     ? {
-        ...submittedValues,
-        page: pagination.current,
-        pageSize: pagination.pageSize,
+        companyCode: submittedValues.companyCode,
+        employeeNo: submittedValues.employeeNo,
+        jobTitle: submittedValues.jobTitle,
+        position: submittedValues.position,
+        role: submittedValues.role,
+        type: submittedValues.type,
       }
     : null
 
@@ -101,7 +102,12 @@ export function useMileageSearch() {
   }, [companies, form])
 
   const handleCompanyChange = () => {
-    form.setFieldsValue({ position: '', role: '' })
+    form.setFieldsValue({
+      employeeName: '',
+      employeeNo: '',
+      position: '',
+      role: '',
+    })
   }
 
   const handleReset = () => {
@@ -115,9 +121,12 @@ export function useMileageSearch() {
 
   const handleSearch = async (values: MileageSearchValues) => {
     const params: MileageSearchParams = {
-      ...values,
-      page: 1,
-      pageSize: pagination.pageSize,
+      companyCode: values.companyCode,
+      employeeNo: values.employeeNo,
+      jobTitle: values.jobTitle,
+      position: values.position,
+      role: values.role,
+      type: values.type,
     }
 
     submitSearch(values)
@@ -153,12 +162,7 @@ export function useMileageSearch() {
     grid: {
       viewType: submittedValues?.type ?? initialValues.type,
       rows: searchResult.items,
-      pagination: {
-        ...pagination,
-        total: searchResult.total,
-      },
       loading: isSearchFetching,
-      onPageChange: changePage,
       onRowClick: openDetail,
     },
     detailModal: {

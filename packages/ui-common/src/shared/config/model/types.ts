@@ -8,6 +8,6 @@ export type EmployeeSearchDataSource = {
   searchEmployees: (params: EmployeeSearchParams) => Promise<EmployeeSearchItem[]>
 }
 
-export type UiCommonConfig = {
+export type SharedServices = {
   employeeSearch: EmployeeSearchDataSource
 }

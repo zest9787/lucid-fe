@@ -1,6 +1,5 @@
 import type { ColDef } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
-import { Pagination } from 'antd'
 import { useMemo } from 'react'
 import '@shared/lib/ag-grid/registerCommunityModules'
 import type { MileageSearchViewModel } from '../model/useMileageSearch'
@@ -78,36 +77,23 @@ export function MileageGrid({ model }: MileageGridProps) {
   )
 
   return (
-    <>
-      <section className="mileage-grid ag-theme-quartz">
-        <AgGridReact<MileageRow>
-          columnDefs={model.viewType === 'D' ? detailColumns : summarizedColumns}
-          defaultColDef={defaultColDef}
-          enableCellSpan
-          getRowId={(params) => params.data.id}
-          loading={model.loading}
-          onRowClicked={(event) => {
-            if (event.data) {
-              model.onRowClick(event.data.employeeId ?? event.data.id)
-            }
-          }}
-          rowData={model.rows}
-          rowHeight={42}
-          suppressCellFocus
-          theme="legacy"
-        />
-      </section>
-      <div className="mileage-grid-pagination">
-        <Pagination
-          current={model.pagination.current}
-          onChange={model.onPageChange}
-          pageSize={model.pagination.pageSize}
-          pageSizeOptions={[5, 10, 20]}
-          showSizeChanger
-          showTotal={(total) => `총 ${total}건`}
-          total={model.pagination.total}
-        />
-      </div>
-    </>
+    <section className="mileage-grid ag-theme-quartz">
+      <AgGridReact<MileageRow>
+        columnDefs={model.viewType === 'D' ? detailColumns : summarizedColumns}
+        defaultColDef={defaultColDef}
+        enableCellSpan
+        getRowId={(params) => params.data.id}
+        loading={model.loading}
+        onRowClicked={(event) => {
+          if (event.data) {
+            model.onRowClick(event.data.employeeId ?? event.data.id)
+          }
+        }}
+        rowData={model.rows}
+        rowHeight={42}
+        suppressCellFocus
+        theme="legacy"
+      />
+    </section>
   )
 }

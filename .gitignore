@@ -6,3 +6,6 @@
 /.idea/modules.xml
 /.idea/vcs.xml
 /.pnpm-store/v11/index.db
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/codeStyles/Project.xml
+/.idea/prettier.xml

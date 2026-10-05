@@ -1,3 +1,3 @@
-export { useUiCommonConfig } from './model/useUiCommonConfig'
-export { UiCommonProvider } from './ui/UiCommonProvider'
-export type { EmployeeSearchDataSource, UiCommonConfig } from './model/types'
+export { useSharedServices } from './model/useSharedServices'
+export { SharedServicesProvider } from './ui/SharedServicesProvider'
+export type { EmployeeSearchDataSource, SharedServices } from './model/types'

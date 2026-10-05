@@ -11,7 +11,7 @@ import {
   OrgUnitSearchTree,
   type EmployeeConditionSearchSubmit,
 } from '@features/employee-search'
-import { useUiCommonConfig } from '@shared/config'
+import { useSharedServices } from '@shared/config'
 import { EmployeeSearchResultGrid } from './EmployeeSearchResultGrid'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
@@ -32,7 +32,7 @@ export function UserSearchModal({
   onCancel,
   onSelect,
 }: UserSearchModalProps) {
-  const { employeeSearch } = useUiCommonConfig()
+  const { employeeSearch } = useSharedServices()
   const [selectedCompanyCode, setSelectedCompanyCode] = useState<string>()
   const [selectedOrgUnitId, setSelectedOrgUnitId] = useState<string>()
   const [selectedEmployee, setSelectedEmployee] = useState<EmployeeSearchItem>()

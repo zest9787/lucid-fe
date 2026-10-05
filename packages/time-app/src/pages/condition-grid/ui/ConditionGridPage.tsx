@@ -1,4 +1,4 @@
-import { Layout, Typography } from 'antd'
+import { Typography } from 'antd'
 import {
   MileageDetailModal,
   MileageGrid,
@@ -11,17 +11,15 @@ export function ConditionGridPage() {
   const { searchForm, grid, detailModal } = useMileageSearch()
 
   return (
-    <Layout className="condition-grid-page">
-      <Layout.Header className="condition-grid-page__header">
-        <Typography.Title level={4}>Condition Grid</Typography.Title>
-      </Layout.Header>
-      <Layout.Content className="condition-grid-page__content">
+    <section className="condition-grid-page">
+      <Typography.Title level={3}>Mileage Search</Typography.Title>
+      <div className="condition-grid-page__content">
         <section className="condition-grid-page__search">
           <MileageSearchForm model={searchForm} />
         </section>
         <MileageGrid model={grid} />
-      </Layout.Content>
+      </div>
       <MileageDetailModal model={detailModal} />
-    </Layout>
+    </section>
   )
 }

@@ -1,10 +1,11 @@
+import { RouterProvider } from '@tanstack/react-router'
 import { AppProviders } from './app/index'
-import { ConditionGridPage } from './pages'
+import { router } from './app/router'
 
 function App() {
   return (
     <AppProviders>
-      <ConditionGridPage />
+      <RouterProvider router={router} />
     </AppProviders>
   )
 }

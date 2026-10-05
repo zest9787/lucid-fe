@@ -1,0 +1,59 @@
+.mileage-editor-grid {
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+    padding: 10px 16px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  &__table {
+    width: 100%;
+    height: 600px;
+  }
+
+  .ag-cell-inline-editing {
+    box-shadow: inset 0 0 0 1px #2563eb;
+  }
+
+  &__calendar-editor {
+    width: 320px;
+    overflow: hidden;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgb(15 23 42 / 18%);
+  }
+
+  &--antd {
+    .ag-cell-inline-editing {
+      padding: 0;
+    }
+
+    .mileage-editor-grid__antd-input,
+    .mileage-editor-grid__antd-select {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+    }
+
+    .mileage-editor-grid__antd-input {
+      padding-inline: var(--ag-cell-horizontal-padding);
+    }
+
+    .mileage-editor-grid__antd-select .ant-select-selector {
+      height: 100%;
+      border-radius: 0;
+    }
+
+    .mileage-editor-grid__antd-select .ant-select-selection-item {
+      display: flex;
+      align-items: center;
+    }
+  }
+}

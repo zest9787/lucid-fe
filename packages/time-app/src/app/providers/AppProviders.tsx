@@ -1,12 +1,19 @@
-import { ConfigProvider } from 'antd'
+import { App as AntdApp, ConfigProvider } from 'antd'
 import type { PropsWithChildren } from 'react'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { UiCommonProvider } from 'ui-common/config'
-import { sampleUiCommonDataSource, uiCommonDataSource } from '../../shared/api'
+import { SharedServicesProvider, type SharedServices } from 'ui-common/config'
+import {
+  employeeSearchDataSource,
+  sampleEmployeeSearchDataSource,
+} from '../../shared/api'
 import { queryClient } from './queryClient'
 
 const useSampleData = import.meta.env.VITE_USE_SAMPLE_DATA !== 'false'
-const uiCommonConfig = useSampleData ? sampleUiCommonDataSource : uiCommonDataSource
+const sharedServices: SharedServices = {
+  employeeSearch: useSampleData
+    ? sampleEmployeeSearchDataSource
+    : employeeSearchDataSource,
+}
 
 export function AppProviders({ children }: PropsWithChildren) {
   return (
@@ -20,9 +27,13 @@ export function AppProviders({ children }: PropsWithChildren) {
         },
       }}
     >
-      <QueryClientProvider client={queryClient}>
-        <UiCommonProvider config={uiCommonConfig}>{children}</UiCommonProvider>
-      </QueryClientProvider>
+      <AntdApp>
+        <QueryClientProvider client={queryClient}>
+          <SharedServicesProvider services={sharedServices}>
+            {children}
+          </SharedServicesProvider>
+        </QueryClientProvider>
+      </AntdApp>
     </ConfigProvider>
   )
 }

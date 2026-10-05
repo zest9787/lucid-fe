@@ -1,3 +1,4 @@
+import { EmployeeSearchFormItem } from 'ui-common/user-search-modal'
 import { SearchForm, SearchRadioGroup, SearchSelect } from '@shared/ui/search-form'
 import type { MileageSearchViewModel } from '../model/useMileageSearch'
 import type { MileageSearchValues } from '../model/types'
@@ -24,6 +25,7 @@ export function MileageSearchForm({ model }: MileageSearchFormProps) {
         placeholder="회사코드"
         onChange={model.onCompanyChange}
       />
+      <EmployeeSearchFormItem onCompanyChange={model.onCompanyChange} />
       <SearchSelect
         label="직위"
         loading={model.loading.positions}

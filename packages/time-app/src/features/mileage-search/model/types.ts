@@ -1,5 +1,3 @@
-import type { PaginationState } from '@shared/lib/pagination'
-
 export type MileageViewType = 'S' | 'D'
 
 export type MileageRow = {
@@ -43,23 +41,20 @@ export type MileageSearchOption = {
 
 export type MileageSearchValues = {
   companyCode?: string
+  employeeNo?: string
+  employeeName?: string
   position?: string
   jobTitle?: string
   role?: string
   type: MileageViewType
 }
 
-export type MileageSearchParams = MileageSearchValues & {
-  page: number
-  pageSize: number
-}
+export type MileageSearchParams = Omit<MileageSearchValues, 'employeeName'>
 
 export type MileageSearchStore = {
   submittedValues: MileageSearchValues | null
-  pagination: PaginationState
   selectedRowId: string | null
   submitSearch: (values: MileageSearchValues) => void
-  changePage: (page: number, pageSize: number) => void
   resetSearch: () => void
   openDetail: (rowId: string) => void
   closeDetail: () => void
