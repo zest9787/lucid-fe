@@ -1,6 +1,7 @@
 import { SearchOutlined } from '@ant-design/icons'
 import { Button, Form, Input, Space } from 'antd'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import type { ComponentRef } from 'react'
 import type { EmployeeSearchItem } from '@entities/employee'
 import { EmployeeAutoComplete } from './EmployeeAutoComplete'
 import { UserSearchModal } from './UserSearchModal'
@@ -26,6 +27,39 @@ export function EmployeeSearchFormItem({
   const form = Form.useFormInstance<EmployeeSearchFormValues>()
   const companyCode = Form.useWatch('companyCode', form)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const compactRef = useRef<ComponentRef<typeof Space.Compact>>(null)
+  const [popupWidth, setPopupWidth] = useState<number>()
+
+  useEffect(() => {
+    const compact = compactRef.current?.nativeElement
+    const employeeNo = compact?.querySelector<HTMLElement>(
+      '.employee-search-form-item__number',
+    )
+    const employeeName = compact?.querySelector<HTMLElement>(
+      '.employee-search-form-item__name',
+    )
+
+    if (!employeeNo || !employeeName) {
+      return
+    }
+
+    const updatePopupWidth = () => {
+      const width =
+        employeeNo.getBoundingClientRect().width +
+        employeeName.getBoundingClientRect().width
+
+      if (width > 0) {
+        setPopupWidth(width)
+      }
+    }
+
+    const observer = new ResizeObserver(updatePopupWidth)
+    observer.observe(employeeNo)
+    observer.observe(employeeName)
+    updatePopupWidth()
+
+    return () => observer.disconnect()
+  }, [])
 
   const applyEmployee = (employee: EmployeeSearchItem) => {
     form.setFieldsValue({
@@ -41,11 +75,12 @@ export function EmployeeSearchFormItem({
         className="common-search-form__field employee-search-form-item"
         label={label}
       >
-        <Space.Compact>
+        <Space.Compact ref={compactRef}>
           <Form.Item name="employeeNo" noStyle>
             <EmployeeAutoComplete
               className="employee-search-form-item__number"
               companyCode={companyCode}
+              popupMatchSelectWidth={popupWidth}
               onChange={() => form.setFieldValue('employeeName', '')}
               onSelect={applyEmployee}
             />
@@ -60,10 +95,7 @@ export function EmployeeSearchFormItem({
           <Button
             htmlType="button"
             icon={<SearchOutlined />}
-            onClick={() => setIsModalOpen(true)}
-          >
-            사원검색
-          </Button>
+            onClick={() => setIsModalOpen(true)}/>
         </Space.Compact>
       </Form.Item>
       <UserSearchModal

@@ -185,6 +185,7 @@ export function MultiUserSearchModal({
           <aside className="user-search-modal__org-panel">
             <Typography.Title level={5}>Department</Typography.Title>
             <OrgUnitSearchTree
+              key={effectiveCompanyCode ?? ''}
               loading={isOrgUnitFetching}
               orgUnits={orgUnits}
               selectedOrgUnitId={selectedOrgUnitId}

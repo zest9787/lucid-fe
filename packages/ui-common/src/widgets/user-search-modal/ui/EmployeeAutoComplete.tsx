@@ -9,6 +9,7 @@ type EmployeeAutoCompleteProps = {
   companyCode?: string
   disabled?: boolean
   placeholder?: string
+  popupMatchSelectWidth?: boolean | number
   value?: string
   onChange?: (value: string) => void
   onSelect: (employee: EmployeeSearchItem) => void
@@ -22,6 +23,7 @@ export function EmployeeAutoComplete({
   companyCode,
   disabled,
   placeholder = '사원번호 또는 사원명',
+  popupMatchSelectWidth = true,
   value = '',
   onChange,
   onSelect,
@@ -81,6 +83,7 @@ export function EmployeeAutoComplete({
       notFoundContent={isFetching ? <Spin size="small" /> : null}
       options={options}
       placeholder={companyCode ? placeholder : '회사코드를 먼저 선택하세요.'}
+      popupMatchSelectWidth={popupMatchSelectWidth}
       value={value}
       onChange={onChange}
       onSelect={(employeeNo) => {
