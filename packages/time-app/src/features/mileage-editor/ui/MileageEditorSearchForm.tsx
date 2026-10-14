@@ -25,7 +25,11 @@ export function MileageEditorSearchForm({ model }: MileageEditorSearchFormProps)
         placeholder="회사코드"
         onChange={model.onCompanyChange}
       />
-      <EmployeeSearchFormItem onCompanyChange={model.onCompanyChange} />
+      <EmployeeSearchFormItem
+        minimumKoreanKeywordLength={2}
+        minimumNumericKeywordLength={5}
+        onCompanyChange={model.onCompanyChange}
+      />
     </SearchForm>
   )
 }

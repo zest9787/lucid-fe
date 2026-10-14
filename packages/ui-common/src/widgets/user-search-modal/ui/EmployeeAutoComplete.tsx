@@ -8,6 +8,8 @@ type EmployeeAutoCompleteProps = {
   className?: string
   companyCode?: string
   disabled?: boolean
+  minimumKoreanKeywordLength?: number
+  minimumNumericKeywordLength?: number
   placeholder?: string
   popupMatchSelectWidth?: boolean | number
   value?: string
@@ -22,6 +24,8 @@ export function EmployeeAutoComplete({
   className,
   companyCode,
   disabled,
+  minimumKoreanKeywordLength = minimumKeywordLength,
+  minimumNumericKeywordLength = minimumKeywordLength,
   placeholder = '사원번호 또는 사원명',
   popupMatchSelectWidth = true,
   value = '',
@@ -30,6 +34,12 @@ export function EmployeeAutoComplete({
 }: EmployeeAutoCompleteProps) {
   const { employeeSearch } = useSharedServices()
   const [debouncedKeyword, setDebouncedKeyword] = useState('')
+  const keyword = value.trim()
+  const requiredKeywordLength = /^[0-9]+$/.test(keyword)
+    ? minimumNumericKeywordLength
+    : /[\uAC00-\uD7A3]/.test(keyword)
+      ? minimumKoreanKeywordLength
+      : minimumKeywordLength
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -40,7 +50,9 @@ export function EmployeeAutoComplete({
   }, [value])
 
   const canSearch =
-    Boolean(companyCode) && debouncedKeyword.length >= minimumKeywordLength
+    Boolean(companyCode) &&
+    keyword.length >= requiredKeywordLength &&
+    keyword === debouncedKeyword
 
   const { data: employees = [], isFetching } = useQuery({
     queryKey: ['ui-common', 'employee-auto-complete', companyCode, debouncedKeyword],

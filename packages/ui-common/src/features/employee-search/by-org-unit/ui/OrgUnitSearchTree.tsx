@@ -14,7 +14,17 @@ type OrgUnitSearchTreeProps = {
 }
 
 const searchDelay = 300
-const minimumKeywordLength = 3
+function canSearchKeyword(keyword: string): boolean {
+  if (/^[0-9]+$/.test(keyword)) {
+    return keyword.length >= 4
+  }
+
+  if (/[\uAC00-\uD7A3]/.test(keyword)) {
+    return keyword.length >= 2
+  }
+
+  return keyword.length >= 3
+}
 
 function highlightKeyword(text: string, keyword: string): ReactNode {
   if (!keyword) {
@@ -78,7 +88,7 @@ export function OrgUnitSearchTree({
     const timer = window.setTimeout(() => {
       const searchKeyword = keyword.trim().toLowerCase()
       setNormalizedKeyword(
-        searchKeyword.length >= minimumKeywordLength ? searchKeyword : '',
+        canSearchKeyword(searchKeyword) ? searchKeyword : '',
       )
     }, searchDelay)
 

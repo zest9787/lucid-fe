@@ -52,7 +52,7 @@ export const sampleEmployees: EmployeeSearchItem[] = [
   {
     id: 'EMP-001',
     employeeNo: '2024001',
-    name: 'Kim Minjun',
+    name: '김민준',
     email: 'minjun.kim@example.com',
     companyCode: 'COM-001',
     orgUnitId: 'ORG-210',
@@ -62,7 +62,7 @@ export const sampleEmployees: EmployeeSearchItem[] = [
   {
     id: 'EMP-002',
     employeeNo: '2024002',
-    name: 'Lee Seoyeon',
+    name: '이서연',
     email: 'seoyeon.lee@example.com',
     companyCode: 'COM-001',
     orgUnitId: 'ORG-120',
@@ -72,7 +72,7 @@ export const sampleEmployees: EmployeeSearchItem[] = [
   {
     id: 'EMP-003',
     employeeNo: '2024003',
-    name: 'Park Jiho',
+    name: '박지호',
     email: 'jiho.park@example.com',
     companyCode: 'COM-001',
     orgUnitId: 'ORG-110',
@@ -82,7 +82,7 @@ export const sampleEmployees: EmployeeSearchItem[] = [
   {
     id: 'EMP-004',
     employeeNo: '2024004',
-    name: 'Choi Yuna',
+    name: '최유나',
     email: 'yuna.choi@example.com',
     companyCode: 'COM-002',
     orgUnitId: 'ORG-310',
@@ -92,7 +92,7 @@ export const sampleEmployees: EmployeeSearchItem[] = [
   {
     id: 'EMP-005',
     employeeNo: '2024005',
-    name: 'Jung Haneul',
+    name: '정하늘',
     email: 'haneul.jung@example.com',
     companyCode: 'COM-002',
     orgUnitId: 'ORG-410',
