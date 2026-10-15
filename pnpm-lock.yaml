@@ -34,7 +34,7 @@ importers:
         version: 6.6.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       axios:
         specifier: ^1.13.2
-        version: 1.20.0
+        version: 1.20.0(debug@4.4.3)
       dayjs:
         specifier: ^1.11.23
         version: 1.11.23
@@ -92,6 +92,10 @@ importers:
         version: 8.2.2(@types/node@24.13.3)(sass@1.104.0)
 
   packages/ui-common:
+    dependencies:
+      styled-components:
+        specifier: ^6.6.0
+        version: 6.6.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
     devDependencies:
       '@ant-design/icons':
         specifier: ^6.1.0
@@ -267,6 +271,12 @@ packages:
 
   '@emotion/hash@0.8.0':
     resolution: {integrity: sha512-kBJtf7PH6aWwZ6fka3zQ0p6SBYzx4fl1LoZXE2RrnYST9Xljm7WfKJrU4g/Xr3Beg72MLrp1AWNUmuYJTL7Cow==}
+
+  '@emotion/is-prop-valid@1.4.0':
+    resolution: {integrity: sha512-QgD4fyscGcbbKwJmqNvUMSE02OsHUa+lAWKdEUIJKgqe5IwRSKd7+KhibEWdaKwgjLj0DRSHA9biAIqGBk05lw==}
+
+  '@emotion/memoize@0.9.0':
+    resolution: {integrity: sha512-30FAj7/EoJ5mwVPOWhAyCX+FPfMDrVecJAM+Iw9NRoSl4BBAQeqj4cApHHUXOVvIPgLVDsCFoz/hGD+5QQD1GQ==}
 
   '@emotion/unitless@0.7.5':
     resolution: {integrity: sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==}
@@ -864,6 +874,9 @@ packages:
 
   '@types/react@19.2.18':
     resolution: {integrity: sha512-AnzbBERsrLKtk2XSfTbYRLjQPdy116Sty4q+T+Bp3IC4l6jNBvreVPAHmpq9qhXQM7CXZPjLVmGMw9sy+hxQ3w==}
+
+  '@types/stylis@4.2.7':
+    resolution: {integrity: sha512-VgDNokpBoKF+wrdvhAAfS55OMQpL6QRglwTwNC3kIgBrzZxA4WsFj+2eLfEA/uMUDzBcEhYmjSbwQakn/i3ajA==}
 
   '@typescript-eslint/eslint-plugin@8.69.0':
     resolution: {integrity: sha512-t5jQTKPIgVW1PE6dR6H6Qz5gm8zjMlX5/2gRaOGd9eO6V7J+tQc6iWKukEe7dY8u9HyYasQ0yfF0/FSSTEO2gA==}
@@ -1549,6 +1562,25 @@ packages:
   string-convert@0.2.1:
     resolution: {integrity: sha512-u/1tdPl4yQnPBjnVrmdLo9gtuLvELKsAoRapekWggdiQNvvvum+jYF329d84NAa660KQw7pB2n36KrIKVoXa3A==}
 
+  styled-components@6.6.0:
+    resolution: {integrity: sha512-drKKsqvDBxVRn4ySU67iQ5nQBuo/1xyYeBfdhDde112PkqrS3+95KPnpDs5hFRcmrW+q6+gbyywYYYR14oWFtw==}
+    engines: {node: '>= 16'}
+    peerDependencies:
+      css-to-react-native: '>= 3.2.0'
+      react: '>= 16.8.0'
+      react-dom: '>= 16.8.0'
+      react-native: '>= 0.68.0'
+    peerDependenciesMeta:
+      css-to-react-native:
+        optional: true
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+
+  stylis@4.3.6:
+    resolution: {integrity: sha512-yQ3rwFWRfwNUY7H5vpU0wfdkNSnvnJinhF9830Swlaxl03zsOjCfmX0ugac+3LtK0lYSgwL/KXc8oYL3mG4YFQ==}
+
   stylis@4.4.0:
     resolution: {integrity: sha512-5Z9ZpRzfuH6l/UAvCPAPUo3665Nk2wLaZU3x+TLHKVzIz33+sbJqbtrYoC3KD4/uVOr2Zp+L0LySezP9OHV9yA==}
 
@@ -1838,6 +1870,12 @@ snapshots:
       '@babel/helper-validator-identifier': 7.29.7
 
   '@emotion/hash@0.8.0': {}
+
+  '@emotion/is-prop-valid@1.4.0':
+    dependencies:
+      '@emotion/memoize': 0.9.0
+
+  '@emotion/memoize@0.9.0': {}
 
   '@emotion/unitless@0.7.5': {}
 
@@ -2416,6 +2454,8 @@ snapshots:
     dependencies:
       csstype: 3.2.3
 
+  '@types/stylis@4.2.7': {}
+
   '@typescript-eslint/eslint-plugin@8.69.0(@typescript-eslint/parser@8.69.0(eslint@10.9.1)(typescript@6.0.3))(eslint@10.9.1)(typescript@6.0.3)':
     dependencies:
       '@eslint-community/regexpp': 4.12.2
@@ -2603,9 +2643,9 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  axios@1.20.0:
+  axios@1.20.0(debug@4.4.3):
     dependencies:
-      follow-redirects: 1.16.0
+      follow-redirects: 1.16.0(debug@4.4.3)
       form-data: 4.0.6
       https-proxy-agent: 5.0.1
       proxy-from-env: 2.1.0
@@ -2804,7 +2844,9 @@ snapshots:
 
   flatted@3.4.4: {}
 
-  follow-redirects@1.16.0: {}
+  follow-redirects@1.16.0(debug@4.4.3):
+    optionalDependencies:
+      debug: 4.4.3
 
   form-data@4.0.6:
     dependencies:
@@ -3113,6 +3155,18 @@ snapshots:
   source-map-js@1.2.1: {}
 
   string-convert@0.2.1: {}
+
+  styled-components@6.6.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+    dependencies:
+      '@emotion/is-prop-valid': 1.4.0
+      '@types/stylis': 4.2.7
+      csstype: 3.2.3
+      react: 19.2.8
+      stylis: 4.3.6
+    optionalDependencies:
+      react-dom: 19.2.8(react@19.2.8)
+
+  stylis@4.3.6: {}
 
   stylis@4.4.0: {}
 

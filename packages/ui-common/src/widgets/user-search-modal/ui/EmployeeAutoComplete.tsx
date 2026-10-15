@@ -1,13 +1,16 @@
-import { AutoComplete, Flex, Spin, Typography } from 'antd'
+import { AutoComplete, Spin, theme } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import type { EmployeeSearchItem } from '@entities/employee'
 import { useSharedServices } from '@shared/config'
+import { EmployeeOptionPopup } from './EmployeeAutoComplete.styles'
+import { EmployeeAutoCompleteOption } from './EmployeeAutoCompleteOption'
 
 type EmployeeAutoCompleteProps = {
   className?: string
   companyCode?: string
   disabled?: boolean
+  minimumEnglishKeywordLength?: number
   minimumKoreanKeywordLength?: number
   minimumNumericKeywordLength?: number
   placeholder?: string
@@ -24,6 +27,7 @@ export function EmployeeAutoComplete({
   className,
   companyCode,
   disabled,
+  minimumEnglishKeywordLength = minimumKeywordLength,
   minimumKoreanKeywordLength = minimumKeywordLength,
   minimumNumericKeywordLength = minimumKeywordLength,
   placeholder = '사원번호 또는 사원명',
@@ -33,13 +37,16 @@ export function EmployeeAutoComplete({
   onSelect,
 }: EmployeeAutoCompleteProps) {
   const { employeeSearch } = useSharedServices()
+  const { token } = theme.useToken()
   const [debouncedKeyword, setDebouncedKeyword] = useState('')
   const keyword = value.trim()
   const requiredKeywordLength = /^[0-9]+$/.test(keyword)
     ? minimumNumericKeywordLength
     : /[\uAC00-\uD7A3]/.test(keyword)
       ? minimumKoreanKeywordLength
-      : minimumKeywordLength
+      : /[a-z]/i.test(keyword)
+        ? minimumEnglishKeywordLength
+        : minimumKeywordLength
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -73,15 +80,9 @@ export function EmployeeAutoComplete({
     () =>
       canSearch
         ? employees.map((employee) => ({
-            label: (
-              <Flex justify="space-between" gap={16}>
-                <Typography.Text>{employee.name}</Typography.Text>
-                <Typography.Text type="secondary">
-                  {employee.employeeNo} · {employee.orgUnitName}
-                </Typography.Text>
-              </Flex>
-            ),
+            label: employee.employeeNo,
             value: employee.employeeNo,
+            employee,
           }))
         : [],
     [canSearch, employees],
@@ -92,10 +93,26 @@ export function EmployeeAutoComplete({
       className={className}
       disabled={disabled || !companyCode}
       filterOption={false}
+      listItemHeight={64}
+      listHeight={320}
       notFoundContent={isFetching ? <Spin size="small" /> : null}
       options={options}
+      optionRender={(option) => (
+        <EmployeeAutoCompleteOption employee={option.data.employee} />
+      )}
       placeholder={companyCode ? placeholder : '회사코드를 먼저 선택하세요.'}
       popupMatchSelectWidth={popupMatchSelectWidth}
+      popupRender={(menu) => (
+        <EmployeeOptionPopup
+          $primary={token.colorPrimary}
+          $activeBackground={token.controlItemBgActive}
+          $hoverBackground={token.controlItemBgHover}
+          $text={token.colorText}
+          $secondaryText={token.colorTextSecondary}
+        >
+          {menu}
+        </EmployeeOptionPopup>
+      )}
       value={value}
       onChange={onChange}
       onSelect={(employeeNo) => {

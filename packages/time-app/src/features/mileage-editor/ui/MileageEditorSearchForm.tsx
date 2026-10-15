@@ -26,6 +26,7 @@ export function MileageEditorSearchForm({ model }: MileageEditorSearchFormProps)
         onChange={model.onCompanyChange}
       />
       <EmployeeSearchFormItem
+        minimumEnglishKeywordLength={3}
         minimumKoreanKeywordLength={2}
         minimumNumericKeywordLength={5}
         onCompanyChange={model.onCompanyChange}

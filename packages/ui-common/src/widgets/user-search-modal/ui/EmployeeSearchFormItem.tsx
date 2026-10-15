@@ -15,6 +15,7 @@ type EmployeeSearchFormValues = {
 
 type EmployeeSearchFormItemProps = {
   label?: string
+  minimumEnglishKeywordLength?: number
   minimumKoreanKeywordLength?: number
   minimumNumericKeywordLength?: number
   onCompanyChange?: () => void
@@ -23,6 +24,7 @@ type EmployeeSearchFormItemProps = {
 
 export function EmployeeSearchFormItem({
   label = '사원',
+  minimumEnglishKeywordLength,
   minimumKoreanKeywordLength,
   minimumNumericKeywordLength,
   onCompanyChange,
@@ -84,6 +86,7 @@ export function EmployeeSearchFormItem({
             <EmployeeAutoComplete
               className="employee-search-form-item__number"
               companyCode={companyCode}
+              minimumEnglishKeywordLength={minimumEnglishKeywordLength}
               minimumKoreanKeywordLength={minimumKoreanKeywordLength}
               minimumNumericKeywordLength={minimumNumericKeywordLength}
               popupMatchSelectWidth={popupWidth}
