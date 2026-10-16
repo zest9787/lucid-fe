@@ -48,14 +48,6 @@
     overflow: hidden;
   }
 
-  &__empty {
-    position: absolute;
-    inset: 64px 0 0;
-    display: grid;
-    place-items: center;
-    pointer-events: none;
-  }
-
   &__row--selected {
     background-color: #eff6ff;
   }

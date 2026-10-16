@@ -253,6 +253,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      'ui-common/employee-picker': fileURLToPath(
+        new URL('../ui-common/src/employee-picker.ts', import.meta.url),
+      ),
       'ui-common/user-search-modal': fileURLToPath(
         new URL('../ui-common/src/user-search-modal.ts', import.meta.url),
       ),

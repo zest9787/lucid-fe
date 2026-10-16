@@ -160,6 +160,7 @@ export function useMileageSearch() {
       onSearch: handleSearch,
     },
     grid: {
+      hasSearched: submittedValues != null,
       viewType: submittedValues?.type ?? initialValues.type,
       rows: searchResult.items,
       loading: isSearchFetching,

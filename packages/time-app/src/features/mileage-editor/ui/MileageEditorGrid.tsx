@@ -1,14 +1,12 @@
 import { DeleteOutlined, PlusOutlined, SaveOutlined } from '@ant-design/icons'
 import { Button, Calendar, Input, Select, Space, Tag, Typography } from 'antd'
 import type { CellValueChangedEvent, ColDef } from 'ag-grid-community'
-import { AgGridReact, type CustomCellEditorProps } from 'ag-grid-react'
+import type { CustomCellEditorProps } from 'ag-grid-react'
+import { CommonGrid } from 'ui-common'
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
-import '@shared/lib/ag-grid/registerCommunityModules'
 import type { MileageEditorViewModel } from '../model/useMileageEditor'
 import type { MileageEditorRow } from '../model/types'
-import 'ag-grid-community/styles/ag-grid.css'
-import 'ag-grid-community/styles/ag-theme-quartz.css'
 import './MileageEditorGrid.scss'
 
 type MileageEditorGridProps = {
@@ -131,8 +129,6 @@ export function MileageEditorGrid({
     () => ({
       editable: true,
       flex: 1,
-      resizable: true,
-      sortable: true,
     }),
     [],
   )
@@ -174,13 +170,12 @@ export function MileageEditorGrid({
         </Space>
       </header>
       <div className="mileage-editor-grid__table ag-theme-quartz">
-        <AgGridReact<MileageEditorRow>
+        <CommonGrid<MileageEditorRow>
           columnDefs={columns}
           defaultColDef={defaultColDef}
           getRowId={(params) => params.data.id}
           loading={model.loading}
           rowData={model.rows}
-          rowHeight={42}
           rowSelection={{
             mode: 'multiRow',
             checkboxes: true,
@@ -189,7 +184,6 @@ export function MileageEditorGrid({
           }}
           selectionColumnDef={{ maxWidth: 52, pinned: 'left' }}
           stopEditingWhenCellsLoseFocus
-          theme="legacy"
           onCellValueChanged={(event: CellValueChangedEvent<MileageEditorRow>) => {
             if (event.data) {
               model.onRowChange(event.data)

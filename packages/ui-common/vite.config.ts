@@ -17,6 +17,7 @@ export default defineConfig({
     lib: {
       entry: {
         index: 'src/index.ts',
+        'employee-picker': 'src/employee-picker.ts',
         'user-search-modal': 'src/user-search-modal.ts',
         config: 'src/config.ts',
       },

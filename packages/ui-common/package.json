@@ -11,6 +11,7 @@
     "sync:exports": "node scripts/sync-package-exports.mjs",
     "build": "node scripts/sync-package-exports.mjs && tsc -b && vite build && tsc -p tsconfig.dts.json && node scripts/rewrite-dts-aliases.mjs",
     "lint": "eslint .",
+    "test:employee-picker": "tsc -p tsconfig.test.json && node --test tests/employeePickerReducer.test.ts",
     "format": "prettier . --write",
     "format:check": "prettier . --check"
   },
@@ -36,7 +37,11 @@
       "types": "./dist/config.d.ts",
       "import": "./dist/config.js"
     },
-    "./style.css": "./dist/ui-common.css"
+    "./style.css": "./dist/ui-common.css",
+    "./employee-picker": {
+      "types": "./dist/employee-picker.d.ts",
+      "import": "./dist/employee-picker.js"
+    }
   },
   "devDependencies": {
     "@ant-design/icons": "^6.1.0",

@@ -1,9 +1,10 @@
+export { CommonGrid } from '@shared/ui/common-grid'
+export type { CommonGridProps } from '@shared/ui/common-grid'
 export {
-  EmployeeAutoComplete,
   EmployeeSearchFormItem,
   MultiUserSearchModal,
   UserSearchModal,
-} from '@widgets/user-search-modal'
+} from '@widgets/employee-picker'
 export type {
   CompanyListResponse,
   CompanyOption,
@@ -14,3 +15,4 @@ export type {
   OrgUnit,
   UserSearchItem,
 } from '@entities/index'
+export { EmployeeAutoComplete } from '@features/employee-search'

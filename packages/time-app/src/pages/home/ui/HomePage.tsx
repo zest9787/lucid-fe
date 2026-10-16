@@ -4,7 +4,7 @@ import {
   MultiUserSearchModal,
   UserSearchModal,
   type UserSearchItem,
-} from 'ui-common/user-search-modal'
+} from 'ui-common/employee-picker'
 import './HomePage.scss'
 
 export function HomePage() {

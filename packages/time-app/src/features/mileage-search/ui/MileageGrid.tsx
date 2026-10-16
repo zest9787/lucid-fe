@@ -1,11 +1,7 @@
 import type { ColDef } from 'ag-grid-community'
-import { AgGridReact } from 'ag-grid-react'
-import { useMemo } from 'react'
-import '@shared/lib/ag-grid/registerCommunityModules'
+import { CommonGrid } from 'ui-common'
 import type { MileageSearchViewModel } from '../model/useMileageSearch'
 import type { MileageRow } from '../model/types'
-import 'ag-grid-community/styles/ag-grid.css'
-import 'ag-grid-community/styles/ag-theme-quartz.css'
 import './MileageGrid.scss'
 
 type MileageGridProps = {
@@ -67,20 +63,12 @@ const detailColumns: ColDef<MileageRow>[] = [
 ]
 
 export function MileageGrid({ model }: MileageGridProps) {
-  const defaultColDef = useMemo<ColDef<MileageRow>>(
-    () => ({
-      filter: true,
-      resizable: true,
-      sortable: true,
-    }),
-    [],
-  )
-
   return (
     <section className="mileage-grid ag-theme-quartz">
-      <AgGridReact<MileageRow>
+      <CommonGrid<MileageRow>
         columnDefs={model.viewType === 'D' ? detailColumns : summarizedColumns}
-        defaultColDef={defaultColDef}
+        defaultColDef={{ filter: true }}
+        emptyState={model.hasSearched ? 'message' : 'blank'}
         enableCellSpan
         getRowId={(params) => params.data.id}
         loading={model.loading}
@@ -90,9 +78,7 @@ export function MileageGrid({ model }: MileageGridProps) {
           }
         }}
         rowData={model.rows}
-        rowHeight={42}
         suppressCellFocus
-        theme="legacy"
       />
     </section>
   )

@@ -1,9 +1,7 @@
-import type { ColDef } from 'ag-grid-community'
-import { AgGridReact } from 'ag-grid-react'
-import { Empty } from 'antd'
+import type { ColDef, RowSelectionOptions } from 'ag-grid-community'
+import { CommonGrid } from '@shared/ui/common-grid'
 import { useMemo } from 'react'
 import type { EmployeeSearchItem } from '@entities/employee'
-import '@shared/lib/ag-grid/registerCommunityModules'
 
 type EmployeeSearchResultGridProps = {
   employees: EmployeeSearchItem[]
@@ -23,6 +21,22 @@ const columns: ColDef<EmployeeSearchItem>[] = [
   { field: 'position', headerName: 'Position', minWidth: 160, flex: 1 },
 ]
 
+// 기존 행 클릭 선택 동작을 유지하면서 AG Grid의 객체형 선택 설정을 사용한다.
+const rowSelectionOptions = {
+  single: {
+    mode: 'singleRow',
+    checkboxes: false,
+    enableClickSelection: true,
+  },
+  multiple: {
+    mode: 'multiRow',
+    checkboxes: false,
+    headerCheckbox: false,
+    enableClickSelection: true,
+    enableSelectionWithoutKeys: true,
+  },
+} satisfies Record<'single' | 'multiple', RowSelectionOptions<EmployeeSearchItem>>
+
 export function EmployeeSearchResultGrid({
   employees,
   loading = false,
@@ -36,25 +50,14 @@ export function EmployeeSearchResultGrid({
     () => new Set(selectedEmployeeIds),
     [selectedEmployeeIds],
   )
-  const defaultColDef = useMemo<ColDef<EmployeeSearchItem>>(
-    () => ({
-      resizable: true,
-      sortable: true,
-    }),
-    [],
-  )
-
   return (
     <div className="user-search-modal__grid ag-theme-quartz">
-      <AgGridReact<EmployeeSearchItem>
+      <CommonGrid<EmployeeSearchItem>
         columnDefs={columns}
-        defaultColDef={defaultColDef}
         getRowId={(params) => params.data.id}
         loading={loading}
         rowData={employees}
-        rowHeight={42}
-        rowSelection={selectionMode}
-        rowMultiSelectWithClick={selectionMode === 'multiple'}
+        rowSelection={rowSelectionOptions[selectionMode]}
         rowClassRules={{
           'user-search-modal__row--selected': (params) =>
             params.data
@@ -63,7 +66,6 @@ export function EmployeeSearchResultGrid({
               : false,
         }}
         suppressCellFocus
-        theme="legacy"
         onRowClicked={(event) => {
           if (event.data && onSelect) {
             onSelect(event.data)
@@ -73,11 +75,6 @@ export function EmployeeSearchResultGrid({
           onSelectionChange?.(event.api.getSelectedRows())
         }}
       />
-      {!loading && employees.length === 0 ? (
-        <div className="user-search-modal__empty">
-          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        </div>
-      ) : null}
     </div>
   )
 }
