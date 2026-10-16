@@ -20,6 +20,7 @@
       "@features/*": ["../ui-common/src/features/*"],
       "@shared/*": ["../ui-common/src/shared/*"],
       "@widgets/*": ["../ui-common/src/widgets/*"],
+      "ui-common/employee-picker": ["../ui-common/src/employee-picker.ts"],
       "ui-common/config": ["../ui-common/src/config.ts"],
       "ui-common/user-search-modal": ["../ui-common/src/user-search-modal.ts"],
       "ui-common": ["../ui-common/src/index.ts"]

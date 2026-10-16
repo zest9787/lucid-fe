@@ -1,9 +1,6 @@
 import type { ColDef } from 'ag-grid-community'
-import { AgGridReact } from 'ag-grid-react'
-import { Empty } from 'antd'
-import { useMemo } from 'react'
+import { CommonGrid } from '@shared/ui/common-grid'
 import type { EmployeeSearchItem } from '@entities/employee'
-import '@shared/lib/ag-grid/registerCommunityModules'
 
 type SelectedEmployeeGridProps = {
   employees: EmployeeSearchItem[]
@@ -17,30 +14,14 @@ const columns: ColDef<EmployeeSearchItem>[] = [
 ]
 
 export function SelectedEmployeeGrid({ employees }: SelectedEmployeeGridProps) {
-  const defaultColDef = useMemo<ColDef<EmployeeSearchItem>>(
-    () => ({
-      resizable: true,
-      sortable: true,
-    }),
-    [],
-  )
-
   return (
     <div className="user-search-modal__grid ag-theme-quartz">
-      <AgGridReact<EmployeeSearchItem>
+      <CommonGrid<EmployeeSearchItem>
         columnDefs={columns}
-        defaultColDef={defaultColDef}
         getRowId={(params) => params.data.id}
         rowData={employees}
-        rowHeight={42}
         suppressCellFocus
-        theme="legacy"
       />
-      {employees.length === 0 ? (
-        <div className="user-search-modal__empty">
-          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        </div>
-      ) : null}
     </div>
   )
 }

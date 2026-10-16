@@ -1,7 +1,9 @@
-import { EmployeeSearchFormItem } from 'ui-common/user-search-modal'
+import { EmployeeSearchFormItem } from 'ui-common/employee-picker'
 import { SearchForm, SearchRadioGroup, SearchSelect } from '@shared/ui/search-form'
-import type { MileageSearchViewModel } from '../model/useMileageSearch'
-import type { MileageSearchValues } from '../model/types'
+import type {
+  MileageSearchViewModel,
+  MileageSearchValues,
+} from '../../../features/mileage-search'
 
 type MileageSearchFormProps = {
   model: MileageSearchViewModel['searchForm']

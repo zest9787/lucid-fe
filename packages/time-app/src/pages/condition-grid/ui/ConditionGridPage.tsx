@@ -2,9 +2,9 @@ import { Typography } from 'antd'
 import {
   MileageDetailModal,
   MileageGrid,
-  MileageSearchForm,
   useMileageSearch,
 } from '../../../features/mileage-search'
+import { MileageSearchForm } from './MileageSearchForm'
 import './ConditionGridPage.scss'
 
 export function ConditionGridPage() {

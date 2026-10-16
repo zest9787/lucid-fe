@@ -11,5 +11,9 @@
     "types": "./dist/config.d.ts",
     "import": "./dist/config.js"
   },
-  "./style.css": "./dist/ui-common.css"
+  "./style.css": "./dist/ui-common.css",
+  "./employee-picker": {
+    "types": "./dist/employee-picker.d.ts",
+    "import": "./dist/employee-picker.js"
+  }
 }

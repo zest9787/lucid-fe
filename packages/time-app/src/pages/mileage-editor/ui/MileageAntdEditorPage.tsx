@@ -1,9 +1,6 @@
 import { Typography } from 'antd'
-import {
-  MileageEditorGrid,
-  MileageEditorSearchForm,
-  useMileageEditor,
-} from '../../../features/mileage-editor'
+import { MileageEditorGrid, useMileageEditor } from '../../../features/mileage-editor'
+import { MileageEditorSearchForm } from './MileageEditorSearchForm'
 import './MileageEditorPage.scss'
 
 export function MileageAntdEditorPage() {

@@ -1,7 +1,8 @@
+// 기존 소비자를 위한 호환 진입점. 새 직원 선택 UI는 ui-common/employee-picker를 사용한다.
 export {
-  EmployeeAutoComplete,
   EmployeeSearchFormItem,
   MultiUserSearchModal,
   UserSearchModal,
-} from '@widgets/user-search-modal'
+} from '@widgets/employee-picker'
 export type { UserSearchItem } from '@entities/employee'
+export { EmployeeAutoComplete } from '@features/employee-search'
