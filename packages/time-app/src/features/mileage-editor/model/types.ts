@@ -15,9 +15,19 @@ export type MileageEditorRow = {
   mileage: number
   status: 'Pending' | 'Approved' | 'Rejected'
   effectiveDate: string
+  resultCode?: 'SUCCESS' | 'FAIL'
+  resultMessage?: string
 }
 
 export type SaveMileageRowsRequest = {
   deletedIds: string[]
   rows: MileageEditorRow[]
+}
+
+export type SaveMileageRowsResponse = {
+  results: Array<{
+    id: string
+    message: string
+    resultCode: 'SUCCESS' | 'FAIL'
+  }>
 }

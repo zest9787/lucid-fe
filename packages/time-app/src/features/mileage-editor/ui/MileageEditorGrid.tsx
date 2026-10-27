@@ -2,9 +2,9 @@ import { DeleteOutlined, PlusOutlined, SaveOutlined } from '@ant-design/icons'
 import { Button, Calendar, Input, Select, Space, Tag, Typography } from 'antd'
 import type { CellValueChangedEvent, ColDef } from 'ag-grid-community'
 import type { CustomCellEditorProps } from 'ag-grid-react'
-import { CommonGrid } from 'ui-common'
+import { CommonGrid, ConfirmModal } from 'ui-common'
 import dayjs from 'dayjs'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import type { MileageEditorViewModel } from '../model/useMileageEditor'
 import type { MileageEditorRow } from '../model/types'
 import './MileageEditorGrid.scss'
@@ -83,7 +83,7 @@ const createColumns = (editorType: 'ag-grid' | 'antd'): ColDef<MileageEditorRow>
     cellEditorParams:
       editorType === 'antd' ? undefined : { values: ['Pending', 'Approved', 'Rejected'] },
     field: 'status',
-    headerName: 'Status (Select)',
+    headerName: 'Approval Status (Select)',
     minWidth: 150,
   },
   {
@@ -106,12 +106,35 @@ const createColumns = (editorType: 'ag-grid' | 'antd'): ColDef<MileageEditorRow>
     valueFormatter: ({ value }) => Number(value ?? 0).toLocaleString(),
     valueParser: ({ newValue }) => Number(newValue),
   },
+  {
+    editable: false,
+    field: 'resultCode',
+    headerName: 'Status',
+    minWidth: 260,
+    cellRenderer: ({ data }: { data?: MileageEditorRow }) => {
+      if (!data?.resultCode) {
+        return null
+      }
+
+      return (
+        <Space size={6}>
+          <Tag color={data.resultCode === 'SUCCESS' ? 'success' : 'error'}>
+            {data.resultCode === 'SUCCESS' ? '성공' : '실패'}
+          </Tag>
+          {data.resultCode === 'FAIL' ? (
+            <Typography.Text type="danger">{data.resultMessage}</Typography.Text>
+          ) : null}
+        </Space>
+      )
+    },
+  },
 ]
 
 export function MileageEditorGrid({
   editorType = 'ag-grid',
   model,
 }: MileageEditorGridProps) {
+  const [isSaveConfirmOpen, setIsSaveConfirmOpen] = useState(false)
   const columns = useMemo(() => {
     const nextColumns = createColumns(editorType)
 
@@ -153,11 +176,11 @@ export function MileageEditorGrid({
             삭제
           </Button>
           <Button
-            disabled={!model.dirty}
+            disabled={!model.canSave}
             icon={<SaveOutlined />}
             loading={model.saving}
             type="primary"
-            onClick={model.onSave}
+            onClick={() => setIsSaveConfirmOpen(true)}
           >
             저장
           </Button>
@@ -184,6 +207,7 @@ export function MileageEditorGrid({
           }}
           selectionColumnDef={{ maxWidth: 52, pinned: 'left' }}
           stopEditingWhenCellsLoseFocus
+          suppressColumnVirtualisation
           onCellValueChanged={(event: CellValueChangedEvent<MileageEditorRow>) => {
             if (event.data) {
               model.onRowChange(event.data)
@@ -194,6 +218,22 @@ export function MileageEditorGrid({
           }}
         />
       </div>
+      <ConfirmModal
+        confirmLoading={model.saving}
+        open={isSaveConfirmOpen}
+        title="저장 확인"
+        onCancel={() => setIsSaveConfirmOpen(false)}
+        onConfirm={() => {
+          setIsSaveConfirmOpen(false)
+          model.onSave()
+        }}
+      >
+        <Typography.Text>
+          {model.selectedIds.length > 0
+            ? `선택한 ${model.selectedIds.length.toLocaleString()}개 행의 변경사항을 저장하시겠습니까?`
+            : '삭제한 데이터의 변경사항을 저장하시겠습니까?'}
+        </Typography.Text>
+      </ConfirmModal>
     </section>
   )
 }

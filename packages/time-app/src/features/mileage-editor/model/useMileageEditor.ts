@@ -20,6 +20,7 @@ export function useMileageEditor() {
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [isRowsFetching, setIsRowsFetching] = useState(false)
   const dirty = changedIds.length > 0 || deletedIds.length > 0
+  const canSave = selectedIds.length > 0 || deletedIds.length > 0
 
   const { data: companies = [], isFetching: isCompaniesFetching } = useQuery(
     mileageEditorQueries.companies(),
@@ -34,10 +35,36 @@ export function useMileageEditor() {
 
   const saveMutation = useMutation({
     mutationFn: mileageEditorApi.saveRows,
-    onSuccess: async ({ savedCount }) => {
-      message.success(`${savedCount}건을 저장했습니다.`)
-      setChangedIds([])
+    onSuccess: async ({ results }) => {
+      const resultById = new Map(results.map((result) => [result.id, result]))
+      const successIdSet = new Set(
+        results
+          .filter((result) => result.resultCode === 'SUCCESS')
+          .map((result) => result.id),
+      )
+      const successCount = successIdSet.size
+      const failureCount = results.length - successCount
+
+      setRows((currentRows) =>
+        currentRows.map((row) => {
+          const result = resultById.get(row.id)
+
+          return result
+            ? {
+                ...row,
+                resultCode: result.resultCode,
+                resultMessage: result.message,
+              }
+            : row
+        }),
+      )
+      setChangedIds((currentIds) => currentIds.filter((id) => !successIdSet.has(id)))
       setDeletedIds([])
+      if (failureCount > 0) {
+        message.warning(`성공 ${successCount}건, 실패 ${failureCount}건입니다.`)
+      } else {
+        message.success(`${successCount}건을 저장했습니다.`)
+      }
       await queryClient.invalidateQueries({ queryKey: ['mileage-editor', 'rows'] })
     },
     onError: () => {
@@ -112,8 +139,13 @@ export function useMileageEditor() {
   }
 
   const changeRow = (changedRow: MileageEditorRow) => {
+    const nextRow = {
+      ...changedRow,
+      resultCode: undefined,
+      resultMessage: undefined,
+    }
     setRows((currentRows) =>
-      currentRows.map((row) => (row.id === changedRow.id ? { ...changedRow } : row)),
+      currentRows.map((row) => (row.id === changedRow.id ? nextRow : row)),
     )
     setChangedIds((currentIds) =>
       currentIds.includes(changedRow.id) ? currentIds : [...currentIds, changedRow.id],
@@ -121,7 +153,14 @@ export function useMileageEditor() {
   }
 
   const save = () => {
-    const hasInvalidRow = rows.some(
+    if (!canSave) {
+      message.warning('저장할 행을 선택하세요.')
+      return
+    }
+
+    const selectedIdSet = new Set(selectedIds)
+    const selectedRows = rows.filter((row) => selectedIdSet.has(row.id))
+    const hasInvalidRow = selectedRows.some(
       (row) =>
         !row.companyCode ||
         !row.employeeNo.trim() ||
@@ -136,10 +175,9 @@ export function useMileageEditor() {
       return
     }
 
-    const changedIdSet = new Set(changedIds)
     saveMutation.mutate({
       deletedIds,
-      rows: rows.filter((row) => changedIdSet.has(row.id)),
+      rows: selectedRows,
     })
   }
 
@@ -155,6 +193,7 @@ export function useMileageEditor() {
     },
     grid: {
       dirty,
+      canSave,
       loading: isRowsFetching,
       rows,
       saving: saveMutation.isPending,
