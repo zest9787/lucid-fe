@@ -1,5 +1,7 @@
 export { CommonGrid } from '@shared/ui/common-grid'
 export type { CommonGridProps } from '@shared/ui/common-grid'
+export { ConfirmModal } from '@shared/ui/confirm-modal'
+export type { ConfirmModalProps } from '@shared/ui/confirm-modal'
 export {
   EmployeeSearchFormItem,
   MultiUserSearchModal,

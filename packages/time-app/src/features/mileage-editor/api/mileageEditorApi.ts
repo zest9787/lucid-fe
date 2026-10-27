@@ -4,6 +4,7 @@ import type {
   MileageEditorRow,
   MileageEditorSearchValues,
   SaveMileageRowsRequest,
+  SaveMileageRowsResponse,
 } from '../model/types'
 
 export const mileageEditorApi = {
@@ -29,7 +30,7 @@ export const mileageEditorApi = {
     return data.items
   },
   saveRows: async (request: SaveMileageRowsRequest) => {
-    const { data } = await httpClient.post<{ savedCount: number }>(
+    const { data } = await httpClient.post<SaveMileageRowsResponse>(
       '/mileage-records/batch',
       request,
     )

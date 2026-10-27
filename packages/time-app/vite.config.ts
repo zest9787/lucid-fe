@@ -130,15 +130,29 @@ const conditionGridMockApi = (): Plugin => ({
               .map((record) => [record.id, record]),
           )
 
-          payload.rows.forEach((record) => recordMap.set(record.id, record))
+          const results = payload.rows.map((record) => {
+            if (record.status === 'Rejected' || record.mileage < 0) {
+              return {
+                id: record.id,
+                message:
+                  record.status === 'Rejected'
+                    ? 'Rejected 상태의 데이터는 저장할 수 없습니다.'
+                    : 'Mileage는 0 이상이어야 합니다.',
+                resultCode: 'FAIL' as const,
+              }
+            }
+
+            recordMap.set(record.id, record)
+            return {
+              id: record.id,
+              message: '저장되었습니다.',
+              resultCode: 'SUCCESS' as const,
+            }
+          })
           savedMileageRecords = [...recordMap.values()]
           response.statusCode = 200
           response.setHeader('Content-Type', 'application/json; charset=utf-8')
-          response.end(
-            JSON.stringify({
-              savedCount: payload.rows.length + payload.deletedIds.length,
-            }),
-          )
+          response.end(JSON.stringify({ results }))
         })
         return
       }
